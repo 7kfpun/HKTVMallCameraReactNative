@@ -161,7 +161,7 @@ export default class HKTVMallCamera extends Component {
           style={styles.image}
           source={{ uri: this.props.data.path }}
         >
-          <Icon name="keyboard-arrow-left" style={styles.back} size={30} color="white" onPress={() => Actions.pop()} />
+          <Icon name="keyboard-arrow-left" style={styles.back} size={30} color="#616161" onPress={() => Actions.pop()} />
         </Image>
         {!this.state.vision && <View style={styles.loading}>
           <Spinner style={styles.spinner} isVisible={this.state.isVisible} size={40} type={'Pulse'} color={'#424242'} />

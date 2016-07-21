@@ -34,19 +34,19 @@ const styles = StyleSheet.create({
   itemName: {
     paddingLeft: 10,
     color: '#424242',
-    fontSize: 12,
+    fontSize: 15,
     fontWeight: '500',
   },
   itemSummary: {
     paddingLeft: 10,
     color: '#424242',
-    fontSize: 12,
+    fontSize: 15,
   },
   itemPrice: {
-    marginTop: 5,
+    marginTop: 10,
     paddingLeft: 10,
     color: '#424242',
-    fontSize: 12,
+    fontSize: 15,
   },
 });
 
