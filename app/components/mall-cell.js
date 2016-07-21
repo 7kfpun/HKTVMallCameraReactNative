@@ -37,7 +37,7 @@ export default class LogosCell extends Component {
     // const that = this;
 
     const query = encodeURIComponent(this.props.query);
-    const url = `https://www.hktvmall.com/hktv/zh/ajax/search_products?query=${query}`;
+    const url = `https://www.hktvmall.com/hktv/zh/ajax/search_products?query=%22${query}%22%3Arelevance`;
     console.log('encodeURIComponent', url);
     const that = this;
     fetch(url, {

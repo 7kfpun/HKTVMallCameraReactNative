@@ -59,7 +59,11 @@ export default class MallItemCell extends Component {
           <View style={styles.body}>
             {this.props.item.images && this.props.item.images.length > 0 && <Image
               style={styles.image}
-              source={{ uri: this.props.item.images[0].url.replace('http', 'https') }}
+              source={{ uri: this.props.item.images[0].url.startsWith('http') ?
+                          this.props.item.images[0].url.replace('http', 'https')
+                          :
+                          `https://www.hktvmall.com${this.props.item.images[0].url}`,
+                        }}
             />}
             <View style={styles.details}>
               <Text style={styles.itemName}>

@@ -17,8 +17,8 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   buttonStyle: {
-    borderColor: '#263238',
-    backgroundColor: '#263238',
+    borderColor: '#757575',
+    backgroundColor: '#757575',
     borderRadius: 0,
     marginBottom: 2,
     height: 18,

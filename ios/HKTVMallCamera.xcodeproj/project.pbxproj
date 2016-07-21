@@ -37,6 +37,7 @@
 		AA7D9D371D3F778B00672040 /* libRCTCameraRoll.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AA7D9D2A1D3F777800672040 /* libRCTCameraRoll.a */; };
 		AAFB05601D40BDD800960011 /* Default-568h.png in Resources */ = {isa = PBXBuildFile; fileRef = AAFB055E1D40BDD800960011 /* Default-568h.png */; };
 		AAFB05611D40BDD800960011 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = AAFB055F1D40BDD800960011 /* Default.png */; };
+		AAFB05631D40DF9200960011 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AAFB05621D40DF9200960011 /* Default-568h@2x.png */; };
 		C23BD0EC91D047F2BE584ADF /* libRCTCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 598E1A247C7C4F9883E53A24 /* libRCTCamera.a */; };
 		DB0FD87F2E4E4A029F0D7952 /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 63D65DADAEFC45BA950A659C /* libRNVectorIcons.a */; };
 		DFFC3CC1EEA64CBBA2E1A3E9 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 58F68E4EAEA04193871D26A8 /* EvilIcons.ttf */; };
@@ -207,6 +208,7 @@
 		AA7D9D231D3F777800672040 /* RCTCameraRoll.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTCameraRoll.xcodeproj; path = "../node_modules/react-native/Libraries/CameraRoll/RCTCameraRoll.xcodeproj"; sourceTree = "<group>"; };
 		AAFB055E1D40BDD800960011 /* Default-568h.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h.png"; sourceTree = "<group>"; };
 		AAFB055F1D40BDD800960011 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		AAFB05621D40DF9200960011 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		B04C1A2F5CC944A7A885533B /* ReactNativePermissions.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = ReactNativePermissions.xcodeproj; path = "../node_modules/react-native-permissions/ReactNativePermissions.xcodeproj"; sourceTree = "<group>"; };
 		B70385DF0CC9426998784115 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		B8F94F1A2DD54F898A103BF0 /* libRNFetchBlob.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNFetchBlob.a; sourceTree = "<group>"; };
@@ -407,6 +409,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				AAFB05621D40DF9200960011 /* Default-568h@2x.png */,
 				AAFB055E1D40BDD800960011 /* Default-568h.png */,
 				AAFB055F1D40BDD800960011 /* Default.png */,
 				13B07FAE1A68108700A75B9A /* HKTVMallCamera */,
@@ -773,6 +776,7 @@
 				409EE67EE91841F384DAA6AB /* Foundation.ttf in Resources */,
 				AAFB05611D40BDD800960011 /* Default.png in Resources */,
 				87D38E4FF2EA487FBAE1343C /* Ionicons.ttf in Resources */,
+				AAFB05631D40DF9200960011 /* Default-568h@2x.png in Resources */,
 				6014340781BE4D8295B0A7EB /* MaterialIcons.ttf in Resources */,
 				300D4AAF98544BB88C8BF3E3 /* Octicons.ttf in Resources */,
 				75756866D0034DC1BBCBDA1F /* Zocial.ttf in Resources */,

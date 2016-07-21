@@ -10,7 +10,7 @@ import {
 import { Actions } from 'react-native-router-flux';
 import Camera from 'react-native-camera';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import Permissions from 'react-native-permissions';
+import Permissions from 'react-native-permissions';  // eslint-disable-line import/no-unresolved
 
 const styles = StyleSheet.create({
   container: {

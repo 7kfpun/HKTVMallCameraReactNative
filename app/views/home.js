@@ -112,10 +112,10 @@ export default class HKTVMallCamera extends Component {
                     type: 'LOGO_DETECTION',
                     maxResults: 5,
                   },
-                  {
-                    type: 'TEXT_DETECTION',
-                    maxResults: 5,
-                  },
+                  // {
+                  //   type: 'TEXT_DETECTION',
+                  //   maxResults: 5,
+                  // },
                 ],
               },
             ],
@@ -152,7 +152,7 @@ export default class HKTVMallCamera extends Component {
     }
     if (this.state.labelAnnotations) {
       query += ' ';
-      query += this.state.labelAnnotations.map((el) => el.description).slice(0, 4).join();
+      query += this.state.labelAnnotations.filter((el) => el.score > 0.6).map((el) => el.description).join();
     }
     console.log('query', query);
     return (
