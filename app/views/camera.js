@@ -88,6 +88,7 @@ export default class BadInstagramCloneApp extends Component {
           style={styles.preview}
           captureAudio={false}
           aspect={Camera.constants.Aspect.fill}
+          captureTarget={Camera.constants.CaptureTarget.temp}
         >
           <Icon name="photo-camera" style={styles.capture} size={40} color="white" onPress={() => this.takePicture()} />
         </Camera>}

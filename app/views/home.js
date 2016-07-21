@@ -77,12 +77,10 @@ export default class HKTVMallCamera extends Component {
     const that = this;
     ImageResizer.createResizedImage(this.props.data.path, 500, 500, 'JPEG', 40).then((resizedImageUri) => {
       console.log('resizedImageUri', resizedImageUri);
-
-      const filename = /id=(.*)\&ext/i.exec(this.props.data.path)[0].replace('id=', '').replace('&ext', '');  // eslint-disable-line no-useless-escape
-
+      const filename = resizedImageUri.replace(/^.*[\\\/]/, '');
       RNFetchBlob.fetch(
         'POST',
-        `https://www.googleapis.com/upload/storage/v1/b/${gcloudStorage}/o?uploadType=media&name=${filename}.jpg`,
+        `https://www.googleapis.com/upload/storage/v1/b/${gcloudStorage}/o?uploadType=media&name=${filename}`,
         {
           'Content-Type': 'image/jpeg',
         },
@@ -151,8 +149,12 @@ export default class HKTVMallCamera extends Component {
       query += this.state.logoAnnotations[0].description;
     }
     if (this.state.labelAnnotations) {
+      let labels = this.state.labelAnnotations.filter((el) => el.score > 0.7).map((el) => el.description);
+      if (labels.length === 0 && query === '') {
+        labels = this.state.labelAnnotations.map((el) => el.description);
+      }
       query += ' ';
-      query += this.state.labelAnnotations.filter((el) => el.score > 0.6).map((el) => el.description).join();
+      query += labels.join();
     }
     console.log('query', query);
     return (

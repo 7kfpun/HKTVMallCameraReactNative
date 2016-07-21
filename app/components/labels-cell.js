@@ -17,8 +17,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   buttonStyle: {
-    borderColor: '#757575',
-    backgroundColor: '#757575',
     borderRadius: 0,
     marginBottom: 2,
     height: 18,
@@ -35,7 +33,10 @@ export default class LabelsCell extends Component {
         {Array.isArray(this.props.elements) && this.props.elements.map((el, i) =>
           <Button
             key={i}
-            style={styles.buttonStyle}
+            style={[styles.buttonStyle, {
+              borderColor: el.score > 0.7 ? '#616161' : '#9E9E9E',
+              backgroundColor: el.score > 0.7 ? '#616161' : '#9E9E9E',
+            }]}
             textStyle={styles.buttonText}
             onPress={() => console.log()}
           >
