@@ -10,6 +10,7 @@ import {
 
 // 3rd party libraries
 import { Actions } from 'react-native-router-flux';
+import GoogleAnalytics from 'react-native-google-analytics-bridge';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ImageResizer from 'react-native-image-resizer'; // eslint-disable-line import/no-unresolved
 import RNFetchBlob from 'react-native-fetch-blob';
@@ -144,6 +145,8 @@ export default class HKTVMallCamera extends Component {
   }
 
   render() {
+    GoogleAnalytics.trackScreenView('Result');
+
     let query = '';
     if (this.state.logoAnnotations) {
       query += this.state.logoAnnotations[0].description;

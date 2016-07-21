@@ -9,6 +9,7 @@ import {
 // 3rd party libraries
 import { Actions } from 'react-native-router-flux';
 import Camera from 'react-native-camera';
+import GoogleAnalytics from 'react-native-google-analytics-bridge';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Permissions from 'react-native-permissions';  // eslint-disable-line import/no-unresolved
 
@@ -79,6 +80,7 @@ export default class BadInstagramCloneApp extends Component {
   }
 
   render() {
+    GoogleAnalytics.trackScreenView('Camera');
     return (
       <View style={styles.container}>
         {this.state.permission !== 'DENIED' && <Camera

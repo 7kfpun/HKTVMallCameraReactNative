@@ -33,11 +33,8 @@ export default class LogosCell extends Component {
   }
 
   componentDidMount() {
-    // http://www.hktvmall.com/hktv/zh/ajax/search_products?query=western%20digital%20technologies%20gadgetmobile%20device
-    // const that = this;
-
     const query = encodeURIComponent(this.props.query);
-    const url = `https://www.hktvmall.com/hktv/zh/ajax/search_products?query=%22${query}%22%3Arelevance`;
+    const url = `https://www.hktvmall.com/hktv/zh/ajax/search_products?query=%22${query}%22%3Arelevance&pageSize=60`;
     console.log('encodeURIComponent', url);
     const that = this;
     fetch(url, {
