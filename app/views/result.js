@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import {
+  Alert,
   Dimensions,
   Image,
   ScrollView,
   StyleSheet,
-  Text,
   View,
 } from 'react-native';
 
@@ -18,6 +18,8 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import ImageResizer from 'react-native-image-resizer'; // eslint-disable-line import/no-unresolved
 import RNFetchBlob from 'react-native-fetch-blob';
 import Spinner from 'react-native-spinkit';
+
+import Egg from 'react-native-egg';
 
 // Components
 import LabelsCell from './../components/labels-cell';
@@ -59,11 +61,6 @@ const styles = StyleSheet.create({
   },
   results: {
     padding: 10,
-  },
-  brandText: {
-    color: '#424242',
-    fontSize: 16,
-    fontWeight: '500',
   },
 });
 
@@ -108,7 +105,7 @@ export default class HKTVMallCamera extends Component {
                 features: [
                   {
                     type: 'LABEL_DETECTION',
-                    maxResults: 10,
+                    maxResults: 15,
                   },
                   {
                     type: 'LOGO_DETECTION',
@@ -165,6 +162,7 @@ export default class HKTVMallCamera extends Component {
       if (labels.length === 0 && query === '') {
         labels = this.state.labelAnnotations.map((el) => el.description);
       }
+      labels = labels.splice(0, 5);
       query += ' ';
       query += labels.join();
     }
@@ -172,19 +170,28 @@ export default class HKTVMallCamera extends Component {
     return (
       <View style={styles.container}>
         <ScrollView >
-          <Image
-            style={styles.image}
-            source={{ uri: this.props.data.path }}
-          />
+          <Egg
+            setps={'TTTTTTTT'}
+            onCatch={() => {
+              Alert.alert('Developer mode?', null, [
+                { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                { text: 'Yes', onPress: () => this.setState({ isDeveloper: true }) },
+              ]);
+            }}
+          >
+            <Image
+              style={styles.image}
+              source={{ uri: this.props.data.path }}
+            />
+          </Egg>
           {!this.state.vision && <View style={styles.loading}>
             <Spinner style={styles.spinner} isVisible={this.state.isVisible} size={40} type={'Pulse'} color={'#424242'} />
           </View>}
           {this.state.vision && <View style={styles.results}>
             {this.state.logoAnnotations && <View style={{ flexDirection: 'row' }}>
-              <Text style={styles.brandText}>Brand: </Text>
               <LogosCell elements={this.state.logoAnnotations} />
             </View>}
-            {this.state.labelAnnotations && <LabelsCell elements={this.state.labelAnnotations} />}
+            {this.state.isDeveloper && this.state.labelAnnotations && <LabelsCell elements={this.state.labelAnnotations} />}
             {query !== '' && <MallCell query={query} filename={this.state.filename} />}
           </View>}
         </ScrollView>
