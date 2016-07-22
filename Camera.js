@@ -7,6 +7,11 @@ import Result from './app/views/result';
 // 3rd party libraries
 import { Actions, Scene, Router } from 'react-native-router-flux';
 
+import { config } from './app/config';
+
+import firebase from 'firebase';
+firebase.initializeApp(config.firebase);
+
 const scenes = Actions.create(
   <Scene key="root">
     <Scene key="camera" title="Camera" component={Camera} hideNavBar={true} initial={true} />

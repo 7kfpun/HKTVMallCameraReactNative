@@ -8,8 +8,11 @@ import {
   View,
 } from 'react-native';
 
+import firebase from 'firebase';
+
 // 3rd party libraries
 import { Actions } from 'react-native-router-flux';
+import DeviceInfo from 'react-native-device-info';
 import GoogleAnalytics from 'react-native-google-analytics-bridge';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ImageResizer from 'react-native-image-resizer'; // eslint-disable-line import/no-unresolved
@@ -26,8 +29,7 @@ import { config } from './../config';
 const gcloudStorage = config.gcloudStorage;
 const gcloudVision = config.gcloudVision;
 
-// import firebase from 'firebase';
-// firebase.initializeApp(config.firebase);
+const uniqueID = DeviceInfo.getUniqueID();
 
 const styles = StyleSheet.create({
   container: {
@@ -79,6 +81,7 @@ export default class HKTVMallCamera extends Component {
     ImageResizer.createResizedImage(this.props.data.path, 500, 500, 'JPEG', 40).then((resizedImageUri) => {
       console.log('resizedImageUri', resizedImageUri);
       const filename = resizedImageUri.replace(/^.*[\\\/]/, '');
+      that.setState({ filename });
       RNFetchBlob.fetch(
         'POST',
         `https://www.googleapis.com/upload/storage/v1/b/${gcloudStorage}/o?uploadType=media&name=${filename}`,
@@ -130,6 +133,12 @@ export default class HKTVMallCamera extends Component {
             console.log('labelAnnotations', that.state.labelAnnotations);
             console.log('logoAnnotations', that.state.logoAnnotations);
             console.log('textAnnotations', that.state.textAnnotations);
+
+            try {
+              firebase.database().ref(`users/${uniqueID}/${filename}/vision`.replace('.jpg', '')).set(jjson.responses[0]);
+            } catch (err) {
+              console.warn(err);
+            }
           }
         })
         .catch((error) => {
@@ -176,7 +185,7 @@ export default class HKTVMallCamera extends Component {
               <LogosCell elements={this.state.logoAnnotations} />
             </View>}
             {this.state.labelAnnotations && <LabelsCell elements={this.state.labelAnnotations} />}
-            {query !== '' && <MallCell query={query} />}
+            {query !== '' && <MallCell query={query} filename={this.state.filename} />}
           </View>}
         </ScrollView>
         <Icon name="keyboard-arrow-left" style={styles.back} size={30} color="#616161" onPress={() => Actions.pop()} />

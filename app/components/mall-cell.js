@@ -5,11 +5,16 @@ import {
   View,
 } from 'react-native';
 
+import firebase from 'firebase';
+
 // 3rd party libraries
+import DeviceInfo from 'react-native-device-info';
 import Spinner from 'react-native-spinkit';
 
 // Elements
 import MallItemCell from './mall-item-cell';
+
+const uniqueID = DeviceInfo.getUniqueID();
 
 const styles = StyleSheet.create({
   container: {
@@ -50,6 +55,12 @@ export default class LogosCell extends Component {
           key: Math.random(),
           loading: false,
         }));
+
+        try {
+          firebase.database().ref(`users/${uniqueID}/${that.props.filename}/hktv`.replace('.jpg', '')).set(json.products);
+        } catch (err) {
+          console.warn(err);
+        }
       }
     })
     .catch((error) => {
@@ -76,9 +87,11 @@ export default class LogosCell extends Component {
 LogosCell.propTypes = {
   elements: React.PropTypes.array,
   query: React.PropTypes.string,
+  filename: React.PropTypes.string,
 };
 
 LogosCell.defaultProps = {
   elements: ['tag'],
   query: 'hktv',
+  filename: 'hktv',
 };
