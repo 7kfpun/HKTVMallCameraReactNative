@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   Alert,
   Dimensions,
+  ImagePickerIOS,
   StyleSheet,
   View,
 } from 'react-native';
@@ -24,9 +25,26 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').height,
     width: Dimensions.get('window').width,
   },
+  rectangleContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+  },
+  rectangle: {
+    height: Dimensions.get('window').width - 40,
+    width: Dimensions.get('window').width - 40,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: 'white',
+    backgroundColor: 'transparent',
+  },
   capture: {
-    marginBottom: 10,
-    padding: 20,
+    marginBottom: 20,
+  },
+  library: {
+    position: 'absolute',
+    left: 25,
+    bottom: 25,
   },
 });
 
@@ -79,6 +97,15 @@ export default class BadInstagramCloneApp extends Component {
       .catch(err => console.error(err));
   }
 
+  pickImage() {
+    ImagePickerIOS.openSelectDialog({}, (response) => {
+      console.log(response);
+      if (response) {
+        Actions.result({ data: { path: response } });
+      }
+    }, (err) => console.log(err));
+  }
+
   render() {
     GoogleAnalytics.trackScreenView('Camera');
     return (
@@ -92,8 +119,12 @@ export default class BadInstagramCloneApp extends Component {
           aspect={Camera.constants.Aspect.fill}
           captureTarget={Camera.constants.CaptureTarget.temp}
         >
-          <Icon name="photo-camera" style={styles.capture} size={40} color="white" onPress={() => this.takePicture()} />
+          <View style={styles.rectangleContainer}>
+            <View style={styles.rectangle} />
+          </View>
+          <Icon name="photo-camera" style={styles.capture} size={52} color="white" onPress={() => this.takePicture()} />
         </Camera>}
+        <Icon name="photo-library" style={styles.library} size={26} color="white" onPress={() => this.pickImage()} />
       </View>
     );
   }

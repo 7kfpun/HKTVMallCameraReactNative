@@ -151,7 +151,7 @@ export default class HKTVMallCamera extends Component {
     if (this.state.logoAnnotations) {
       query += this.state.logoAnnotations[0].description;
     }
-    if (this.state.labelAnnotations) {
+    if (this.state.labelAnnotations && query === '') {
       let labels = this.state.labelAnnotations.filter((el) => el.score > 0.7).map((el) => el.description);
       if (labels.length === 0 && query === '') {
         labels = this.state.labelAnnotations.map((el) => el.description);
