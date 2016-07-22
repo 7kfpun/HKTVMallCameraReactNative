@@ -1,16 +1,28 @@
 import React, { Component } from 'react';
+import {
+  Platform,
+} from 'react-native';
 
 // Views
 import Camera from './app/views/camera';
 import Result from './app/views/result';
 
+import firebase from 'firebase';
+
 // 3rd party libraries
 import { Actions, Scene, Router } from 'react-native-router-flux';
+import DeviceInfo from 'react-native-device-info';
+import GoogleAnalytics from 'react-native-google-analytics-bridge';
 
 import { config } from './app/config';
 
-import firebase from 'firebase';
 firebase.initializeApp(config.firebase);
+
+GoogleAnalytics.setTrackerId(config.googleAnalytics[Platform.OS]);
+
+if (DeviceInfo.getDeviceName() === 'iPhone Simulator') {
+  GoogleAnalytics.setDryRun(true);
+}
 
 const scenes = Actions.create(
   <Scene key="root">
