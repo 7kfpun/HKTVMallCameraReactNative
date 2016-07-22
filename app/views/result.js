@@ -159,27 +159,28 @@ export default class HKTVMallCamera extends Component {
       query += ' ';
       query += labels.join();
     }
-    console.log('query', query);
+    console.log('Query:', query);
     return (
-      <ScrollView style={styles.container}>
-        <Image
-          style={styles.image}
-          source={{ uri: this.props.data.path }}
-        >
-          <Icon name="keyboard-arrow-left" style={styles.back} size={30} color="#616161" onPress={() => Actions.pop()} />
-        </Image>
-        {!this.state.vision && <View style={styles.loading}>
-          <Spinner style={styles.spinner} isVisible={this.state.isVisible} size={40} type={'Pulse'} color={'#424242'} />
-        </View>}
-        {this.state.vision && <View style={styles.results}>
-          {this.state.logoAnnotations && <View style={{ flexDirection: 'row' }}>
-            <Text style={styles.brandText}>Brand: </Text>
-            <LogosCell elements={this.state.logoAnnotations} />
+      <View style={styles.container}>
+        <ScrollView >
+          <Image
+            style={styles.image}
+            source={{ uri: this.props.data.path }}
+          />
+          {!this.state.vision && <View style={styles.loading}>
+            <Spinner style={styles.spinner} isVisible={this.state.isVisible} size={40} type={'Pulse'} color={'#424242'} />
           </View>}
-          {this.state.labelAnnotations && <LabelsCell elements={this.state.labelAnnotations} />}
-          {query !== '' && <MallCell query={query} />}
-        </View>}
-      </ScrollView>
+          {this.state.vision && <View style={styles.results}>
+            {this.state.logoAnnotations && <View style={{ flexDirection: 'row' }}>
+              <Text style={styles.brandText}>Brand: </Text>
+              <LogosCell elements={this.state.logoAnnotations} />
+            </View>}
+            {this.state.labelAnnotations && <LabelsCell elements={this.state.labelAnnotations} />}
+            {query !== '' && <MallCell query={query} />}
+          </View>}
+        </ScrollView>
+        <Icon name="keyboard-arrow-left" style={styles.back} size={30} color="#616161" onPress={() => Actions.pop()} />
+      </View>
     );
   }
 }
