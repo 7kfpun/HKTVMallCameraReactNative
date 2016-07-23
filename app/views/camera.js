@@ -46,6 +46,11 @@ const styles = StyleSheet.create({
     left: 25,
     bottom: 25,
   },
+  moreButton: {
+    position: 'absolute',
+    right: 25,
+    bottom: 25,
+  },
 });
 
 export default class BadInstagramCloneApp extends Component {
@@ -125,6 +130,7 @@ export default class BadInstagramCloneApp extends Component {
           <Icon name="photo-camera" style={styles.capture} size={52} color="white" onPress={() => this.takePicture()} />
         </Camera>}
         <Icon name="photo-library" style={styles.library} size={26} color="white" onPress={() => this.pickImage()} />
+        <Icon name="format-list-bulleted" style={styles.moreButton} size={28} color="white" onPress={() => Actions.more()} />
       </View>
     );
   }

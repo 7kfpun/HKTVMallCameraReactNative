@@ -1,6 +1,7 @@
 package com.hktvmallcamera;
 
 import com.facebook.react.ReactActivity;
+import cl.json.RNSharePackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.idehub.GoogleAnalyticsBridge.GoogleAnalyticsBridgePackage;
 import com.react.rnspinkit.RNSpinkitPackage;

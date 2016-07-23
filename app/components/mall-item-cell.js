@@ -11,6 +11,10 @@ import {
 
 import striptags from 'striptags';
 
+// 3rd party libraries
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import Share from 'react-native-share';
+
 const styles = StyleSheet.create({
   container: {
     marginBottom: 10,
@@ -48,9 +52,23 @@ const styles = StyleSheet.create({
     color: '#424242',
     fontSize: 15,
   },
+  option: {
+    marginHorizontal: 5,
+  },
 });
 
 export default class MallItemCell extends Component {
+  onShare() {
+    Share.open({
+      share_subject: this.props.item.itemName,
+      share_text: this.props.item.summary,
+      share_URL: this.props.item.url,
+      title: 'Share Link',
+    }, (err) => {
+      console.log(err);
+    });
+  }
+
   render() {
     const url = this.props.item.url;
     return (
@@ -75,6 +93,11 @@ export default class MallItemCell extends Component {
               <Text style={styles.itemPrice}>
                 {this.props.item.price && this.props.item.price.formattedValue}
               </Text>
+
+              <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+                <Icon name="share" style={styles.option} size={18} color="#757575" onPress={() => this.onShare()} />
+                <Icon name="save" style={styles.option} size={18} color="#757575" onPress={() => this.onSave()} />
+              </View>
             </View>
           </View>
         </TouchableHighlight>

@@ -18,9 +18,12 @@
     "react-native-fetch-blob": "^0.7.2",
     "react-native-google-analytics-bridge": "^2.1.0",
     "react-native-image-resizer": "0.0.6",
+    "react-native-navbar": "^1.5.0",
     "react-native-permissions": "^0.1.1",
     "react-native-router-flux": "^3.31.1",
+    "react-native-share": "^1.0.12",
     "react-native-spinkit": "^0.1.2",
+    "react-native-tableview-simple": "^0.11.0",
     "react-native-vector-icons": "^2.0.3",
     "striptags": "^2.1.1"
   },
