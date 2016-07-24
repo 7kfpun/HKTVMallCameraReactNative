@@ -75,13 +75,13 @@ export default class MallItemCell extends Component {
         .catch(err => {
           console.error('Cannot open safari', err);
         });
-      GoogleAnalytics.trackEvent('user-action', 'open-url');
     } catch (err) {
       Linking.openURL(hktvUrl)
         .catch(err1 => {
           console.error('Cannot open url', err1);
         });
     }
+    GoogleAnalytics.trackEvent('user-action', 'open-url');
   }
 
   onShare(item) {
