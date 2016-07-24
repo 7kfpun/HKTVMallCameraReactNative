@@ -12,6 +12,7 @@ import {
 import striptags from 'striptags';
 
 // 3rd party libraries
+import GoogleAnalytics from 'react-native-google-analytics-bridge';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import SafariView from 'react-native-safari-view';
 import Share from 'react-native-share';
@@ -70,6 +71,7 @@ export default class MallItemCell extends Component {
         .catch(err => {
           console.error('Cannot open safari', err);
         });
+      GoogleAnalytics.trackEvent('user-action', 'open-url');
     } catch (err) {
       Linking.openURL(hktvUrl)
         .catch(err1 => {
@@ -87,6 +89,7 @@ export default class MallItemCell extends Component {
     }, (err) => {
       console.log(err);
     });
+    GoogleAnalytics.trackEvent('user-action', 'share-item');
   }
 
   render() {
@@ -104,7 +107,7 @@ export default class MallItemCell extends Component {
             />}
             <View style={styles.details}>
               <Text style={styles.itemName}>
-                {this.props.item.name}
+                {this.props.item.brandName} - {this.props.item.name}
               </Text>
               <Text style={styles.itemSummary}>
                 {striptags(this.props.item.summary)}

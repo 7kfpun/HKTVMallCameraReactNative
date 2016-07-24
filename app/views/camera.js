@@ -98,6 +98,7 @@ export default class BadInstagramCloneApp extends Component {
       .then((data) => {
         console.log(data);
         Actions.result({ data });
+        GoogleAnalytics.trackEvent('user-action', 'take-picture');
       })
       .catch(err => console.error(err));
   }
@@ -107,6 +108,7 @@ export default class BadInstagramCloneApp extends Component {
       console.log(response);
       if (response) {
         Actions.result({ data: { path: response } });
+        GoogleAnalytics.trackEvent('user-action', 'pick-image');
       }
     }, (err) => console.log(err));
   }
