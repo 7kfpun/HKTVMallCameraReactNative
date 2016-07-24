@@ -13,6 +13,7 @@ import striptags from 'striptags';
 
 // 3rd party libraries
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import SafariView from 'react-native-safari-view';
 import Share from 'react-native-share';
 
 const styles = StyleSheet.create({
@@ -58,6 +59,25 @@ const styles = StyleSheet.create({
 });
 
 export default class MallItemCell extends Component {
+  onOpenUrl(url) {
+    // const hktvUrl = `http://www.hktvmall.com/${url}?utm_source=MallCam&utm_medium=app&utm_term=MayIHaveAShortMeetingWithYou&utm_content=hey@frontn.com&utm_campaign=HiRickyWong&ref=MayIHaveAShortMeetingWithYou`;  // eslint-disable-line max-len
+    const hktvUrl = `http://www.hktvmall.com/${url}?utm_source=MallCam&utm_medium=app&utm_campaign=HiRickyWong`;
+    try {
+      SafariView.isAvailable()
+        .then(SafariView.show({
+          url: hktvUrl,
+        }))
+        .catch(err => {
+          console.error('Cannot open safari', err);
+        });
+    } catch (err) {
+      Linking.openURL(hktvUrl)
+        .catch(err1 => {
+          console.error('Cannot open url', err1);
+        });
+    }
+  }
+
   onShare() {
     Share.open({
       share_subject: this.props.item.itemName,
@@ -70,10 +90,9 @@ export default class MallItemCell extends Component {
   }
 
   render() {
-    const url = this.props.item.url;
     return (
       <View style={styles.container}>
-        <TouchableHighlight onPress={() => Linking.openURL(`http://www.hktvmall.com/${url}?ref=HiRickyWong`)} underlayColor="#E0E0E0">
+        <TouchableHighlight onPress={() => this.onOpenUrl(this.props.item.url)} underlayColor="#E0E0E0">
           <View style={styles.body}>
             {this.props.item.images && this.props.item.images.length > 0 && <Image
               style={styles.image}

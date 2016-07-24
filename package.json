@@ -21,6 +21,7 @@
     "react-native-navbar": "^1.5.0",
     "react-native-permissions": "^0.1.1",
     "react-native-router-flux": "^3.31.1",
+    "react-native-safari-view": "^1.0.0",
     "react-native-share": "^1.0.12",
     "react-native-spinkit": "^0.1.2",
     "react-native-tableview-simple": "^0.11.0",
