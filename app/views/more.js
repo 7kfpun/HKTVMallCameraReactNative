@@ -67,7 +67,7 @@ export default class MoreView extends Component {
 
     this.state = {
       dataSource: new ListView.DataSource({ rowHasChanged: (row1, row2) => row1 !== row2 }),
-      loading: true,
+      hasSaved: false,
     };
   }
 
@@ -101,8 +101,10 @@ export default class MoreView extends Component {
       if (Product.length > 0) {
         that.setState({
           dataSource: that.state.dataSource.cloneWithRows(Product),
-          key: Math.random(),
+          hasSaved: true,
         });
+      } else {
+        that.setState({ hasSaved: false });
       }
     });
   }
@@ -117,8 +119,10 @@ export default class MoreView extends Component {
         if (product.length > 0) {
           that.setState({
             dataSource: that.state.dataSource.cloneWithRows(product),
-            key: Math.random(),
+            hasSaved: true,
           });
+        } else {
+          that.setState({ hasSaved: false });
         }
       }
     });
@@ -150,12 +154,12 @@ export default class MoreView extends Component {
         <ScrollView>
           <TableView>
             <Section header="SAVED">
-              <ListView
+              {this.state.hasSaved && <ListView
                 key={this.state.key}
                 dataSource={this.state.dataSource}
                 renderRow={(rowData) => <TouchableHighlight onPress={() => this.onOpenUrl(rowData.url)} underlayColor="#E0E0E0">
                   <View style={styles.savedItem}>
-                    <Icon name="remove-circle" size={20} color="red" onPress={() => this.removeItem(rowData)} />
+                    <Icon name="remove-circle" style={{ paddingHorizontal: 5 }} size={25} color="red" onPress={() => this.removeItem(rowData)} />
                     {rowData.images && rowData.images.length > 0 && <Image
                       style={styles.image}
                       source={{ uri: rowData.images[0].url.startsWith('http') ?
@@ -170,10 +174,10 @@ export default class MoreView extends Component {
                     </View>
                   </View>
                 </TouchableHighlight>}
-              />
+              />}
             </Section>
 
-            <Section>
+            {/* <Section>
               <Cell
                 cellstyle="RightDetail"
                 title="Clear all"
@@ -189,7 +193,7 @@ export default class MoreView extends Component {
                   ]
                 )}
               />
-            </Section>
+            </Section> */}
 
             <Section header="INFO">
               <Cell
