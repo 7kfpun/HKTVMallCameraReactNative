@@ -3,9 +3,9 @@ import {
   Dimensions,
   Image,
   Linking,
-  TouchableHighlight,
   StyleSheet,
   Text,
+  TouchableHighlight,
   View,
 } from 'react-native';
 
@@ -16,6 +16,8 @@ import GoogleAnalytics from 'react-native-google-analytics-bridge';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import SafariView from 'react-native-safari-view';
 import Share from 'react-native-share';
+import store from 'react-native-simple-store';
+import Toast from 'react-native-root-toast';
 
 const styles = StyleSheet.create({
   container: {
@@ -39,6 +41,7 @@ const styles = StyleSheet.create({
   },
   itemName: {
     paddingLeft: 10,
+    marginBottom: 5,
     color: '#424242',
     fontSize: 15,
     fontWeight: '500',
@@ -49,20 +52,21 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   itemPrice: {
-    marginTop: 10,
+    marginTop: 5,
     paddingLeft: 10,
     color: '#424242',
     fontSize: 15,
   },
   option: {
-    marginHorizontal: 5,
+    paddingTop: 10,
+    paddingHorizontal: 10,
   },
 });
 
 export default class MallItemCell extends Component {
   onOpenUrl(url) {
-    // const hktvUrl = `http://www.hktvmall.com/${url}?utm_source=MallCam&utm_medium=app&utm_term=MayIHaveAShortMeetingWithYou&utm_content=hey@frontn.com&utm_campaign=HiRickyWong&ref=MayIHaveAShortMeetingWithYou`;  // eslint-disable-line max-len
-    const hktvUrl = `http://www.hktvmall.com/${url}?utm_source=MallCam&utm_medium=app&utm_campaign=HiRickyWong`;
+    // const hktvUrl = `https://www.hktvmall.com/${url}?utm_source=MallCam&utm_medium=app&utm_term=MayIHaveAShortMeetingWithYou&utm_content=hey@frontn.com&utm_campaign=HiRickyWong&ref=MayIHaveAShortMeetingWithYou`;  // eslint-disable-line max-len
+    const hktvUrl = `https://www.hktvmall.com/${url}?utm_source=MallCam&utm_medium=app&utm_campaign=HiRickyWong`;
     try {
       SafariView.isAvailable()
         .then(SafariView.show({
@@ -80,16 +84,30 @@ export default class MallItemCell extends Component {
     }
   }
 
-  onShare() {
+  onShare(item) {
     Share.open({
-      share_subject: this.props.item.itemName,
-      share_text: this.props.item.summary,
-      share_URL: this.props.item.url,
+      share_subject: item.itemName,
+      share_text: item.summary,
+      share_URL: item.url,
       title: 'Share Link',
     }, (err) => {
       console.log(err);
     });
     GoogleAnalytics.trackEvent('user-action', 'share-item');
+  }
+
+  onSave(item) {
+    store.get('Product').then(savedProduct => {
+      console.log('savedProduct', savedProduct);
+      let product = savedProduct;
+      if (!product) {
+        product = [];
+      }
+      product.push(item);
+      store.save('Product', product);
+      Toast.show('Saved', { duration: Toast.durations.SHORT });
+    });
+    GoogleAnalytics.trackEvent('user-action', 'save-item');
   }
 
   render() {
@@ -117,8 +135,8 @@ export default class MallItemCell extends Component {
               </Text>
 
               <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-                <Icon name="share" style={styles.option} size={18} color="#757575" onPress={() => this.onShare()} />
-                <Icon name="save" style={styles.option} size={18} color="#757575" onPress={() => this.onSave()} />
+                <Icon name="share" style={styles.option} size={20} color="#757575" onPress={() => this.onShare(this.props.item)} />
+                <Icon name="add-shopping-cart" style={styles.option} size={20} color="#757575" onPress={() => this.onSave(this.props.item)} />
               </View>
             </View>
           </View>

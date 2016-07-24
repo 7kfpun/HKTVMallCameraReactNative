@@ -1,21 +1,30 @@
 import React, { Component } from 'react';
 import {
   Alert,
+  Image,
   Linking,
+  ListView,
   Platform,
   ScrollView,
   StyleSheet,
+  Text,
   View,
+  TouchableHighlight,
 } from 'react-native';
 
 // 3rd party libraries
 import { Actions } from 'react-native-router-flux';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import GoogleAnalytics from 'react-native-google-analytics-bridge';
-import NavigationBar from 'react-native-navbar';
-
-import DeviceInfo from 'react-native-device-info';
 import { Cell, Section, TableView } from 'react-native-tableview-simple';
+import DeviceInfo from 'react-native-device-info';
+import GoogleAnalytics from 'react-native-google-analytics-bridge';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import NavigationBar from 'react-native-navbar';
+import SafariView from 'react-native-safari-view';
+import store from 'react-native-simple-store';
+
+// Utils
+import UtilFuncs from '../utils/functions';
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -36,13 +45,83 @@ const styles = StyleSheet.create({
     paddingLeft: 50,
     paddingRight: 10,
   },
+  savedItem: {
+    backgroundColor: 'white',
+    padding: 15,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: '#CCCCCC',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  image: {
+    width: 30,
+    height: 30,
+    resizeMode: 'cover',
+    marginLeft: 10,
+  },
 });
 
 export default class MoreView extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      dataSource: new ListView.DataSource({ rowHasChanged: (row1, row2) => row1 !== row2 }),
+      loading: true,
+    };
+  }
+
+  componentDidMount() {
+    this.prepareSavedItems();
+  }
+
+  onOpenUrl(url) {
+    // const hktvUrl = `https://www.hktvmall.com/${url}?utm_source=MallCam&utm_medium=app&utm_term=MayIHaveAShortMeetingWithYou&utm_content=hey@frontn.com&utm_campaign=HiRickyWong&ref=MayIHaveAShortMeetingWithYou`;  // eslint-disable-line max-len
+    const hktvUrl = `https://www.hktvmall.com/${url}?utm_source=MallCam&utm_medium=app&utm_campaign=HiRickyWong`;
+    try {
+      SafariView.isAvailable()
+        .then(SafariView.show({
+          url: hktvUrl,
+        }))
+        .catch(err => {
+          console.error('Cannot open safari', err);
+        });
+      GoogleAnalytics.trackEvent('user-action', 'open-url');
+    } catch (err) {
+      Linking.openURL(hktvUrl)
+        .catch(err1 => {
+          console.error('Cannot open url', err1);
+        });
+    }
+  }
+
+  prepareSavedItems() {
+    const that = this;
+    store.get('Product').then(Product => {
+      if (Product.length > 0) {
+        that.setState({
+          dataSource: that.state.dataSource.cloneWithRows(Product),
+          key: Math.random(),
+        });
+      }
+    });
+  }
+
+  removeItem(item) {
+    const that = this;
+    store.get('Product').then(savedProduct => {
+      if (savedProduct.length > 0) {
+        const product = UtilFuncs.removeObjectfromArray(savedProduct, 'storeCode', item.storeCode);
+        store.save('Product', product);
+
+        if (product.length > 0) {
+          that.setState({
+            dataSource: that.state.dataSource.cloneWithRows(product),
+            key: Math.random(),
+          });
+        }
+      }
+    });
   }
 
   renderToolbar() {
@@ -70,7 +149,48 @@ export default class MoreView extends Component {
         {this.renderToolbar()}
         <ScrollView>
           <TableView>
-            {/* <Section header="SAVED"></Section> */}
+            <Section header="SAVED">
+              <ListView
+                key={this.state.key}
+                dataSource={this.state.dataSource}
+                renderRow={(rowData) => <TouchableHighlight onPress={() => this.onOpenUrl(rowData.url)} underlayColor="#E0E0E0">
+                  <View style={styles.savedItem}>
+                    <Icon name="remove-circle" size={20} color="red" onPress={() => this.removeItem(rowData)} />
+                    {rowData.images && rowData.images.length > 0 && <Image
+                      style={styles.image}
+                      source={{ uri: rowData.images[0].url.startsWith('http') ?
+                                  rowData.images[0].url.replace('http', 'https')
+                                  :
+                                  `https://www.hktvmall.com${rowData.images[0].url}`,
+                                }}
+                    />}
+                    <View style={{ paddingLeft: 10, flexDirection: 'column' }}>
+                      <Text>{rowData.brandName}</Text>
+                      <Text style={{ color: '#424242' }}>{rowData.name.length > 22 ? `${rowData.name.substring(0, 22 - 3)}...` : rowData.name}</Text>
+                    </View>
+                  </View>
+                </TouchableHighlight>}
+              />
+            </Section>
+
+            <Section>
+              <Cell
+                cellstyle="RightDetail"
+                title="Clear all"
+                onPress={() => Alert.alert(
+                  'Confirm',
+                  '',
+                  [
+                    { text: 'Cancel', style: 'cancel' },
+                    { text: 'OK', onPress: () => {
+                      store.save('Product', []);
+                      this.prepareSavedItems();
+                    } },
+                  ]
+                )}
+              />
+            </Section>
+
             <Section header="INFO">
               <Cell
                 cellstyle="RightDetail"
