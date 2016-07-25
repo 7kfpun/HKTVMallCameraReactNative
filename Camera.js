@@ -6,6 +6,7 @@ import {
 // Views
 import Camera from './app/views/camera';
 import Result from './app/views/result';
+import BarcodeResult from './app/views/barcode-result';
 import More from './app/views/more';
 
 import firebase from 'firebase';
@@ -29,6 +30,7 @@ const scenes = Actions.create(
   <Scene key="root">
     <Scene key="camera" title="Camera" component={Camera} hideNavBar={true} initial={true} />
     <Scene key="result" title="Result" component={Result} hideNavBar={true} />
+    <Scene key="barcodeResult" title="Result" component={BarcodeResult} hideNavBar={true} />
     <Scene key="more" title="More" component={More} hideNavBar={true} />
   </Scene>
 );

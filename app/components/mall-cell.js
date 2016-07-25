@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import {
+  Dimensions,
   ListView,
   StyleSheet,
+  Text,
   View,
 } from 'react-native';
 
@@ -25,6 +27,15 @@ const styles = StyleSheet.create({
     margin: 50,
     alignItems: 'center',
   },
+  noResults: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: Dimensions.get('window').height - 30,
+    width: Dimensions.get('window').width - 20,
+    backgroundColor: 'white',
+  },
 });
 
 export default class LogosCell extends Component {
@@ -34,6 +45,7 @@ export default class LogosCell extends Component {
     this.state = {
       dataSource: new ListView.DataSource({ rowHasChanged: (row1, row2) => row1 !== row2 }),
       loading: true,
+      products: [],
     };
   }
 
@@ -53,15 +65,21 @@ export default class LogosCell extends Component {
         that.setState(Object.assign({}, json, {
           dataSource: that.state.dataSource.cloneWithRows(json.products),
           key: Math.random(),
-          loading: false,
+          products: json.products,
         }));
 
         try {
-          firebase.database().ref(`users/${uniqueID}/${that.props.filename}/hktv`.replace('.jpg', '')).set(json.products);
+          if (that.props.filename) {
+            firebase.database().ref(`users/${uniqueID}/${that.props.filename}/hktv`.replace('.jpg', '')).set(json.products);
+          }
         } catch (err) {
           console.warn(err);
         }
       }
+
+      that.setState(Object.assign({}, json, {
+        loading: false,
+      }));
     })
     .catch((error) => {
       console.warn(error);
@@ -74,11 +92,14 @@ export default class LogosCell extends Component {
         {this.state.loading && <View style={styles.spinner}>
           <Spinner isVisible={this.state.isVisible} size={40} type={'Pulse'} color={'#424242'} />
         </View>}
-        <ListView
+        {!this.state.loading && this.state.products.length === 0 && <View style={styles.noResults}>
+          <Text>No results</Text>
+        </View>}
+        {!this.state.loading && this.state.products.length > 0 && <ListView
           key={this.state.key}
           dataSource={this.state.dataSource}
           renderRow={(rowData, sectionID, rowID) => <MallItemCell item={rowData} rowID={rowID} />}
-        />
+        />}
       </View>
     );
   }
@@ -93,5 +114,4 @@ LogosCell.propTypes = {
 LogosCell.defaultProps = {
   elements: ['tag'],
   query: 'hktv',
-  filename: 'hktv',
 };

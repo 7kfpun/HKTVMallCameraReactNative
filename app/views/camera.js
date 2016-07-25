@@ -4,6 +4,7 @@ import {
   Dimensions,
   ImagePickerIOS,
   StyleSheet,
+  Vibration,
   View,
 } from 'react-native';
 
@@ -13,6 +14,8 @@ import Camera from 'react-native-camera';
 import GoogleAnalytics from 'react-native-google-analytics-bridge';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Permissions from 'react-native-permissions';  // eslint-disable-line import/no-unresolved
+
+let lastScan;
 
 const styles = StyleSheet.create({
   container: {
@@ -93,6 +96,24 @@ export default class BadInstagramCloneApp extends Component {
       });
   }
 
+  onBarCodeRead(e) {
+    const timestamp = Math.round(new Date().getTime() / 1000 / 4);
+    if (e.type === 'org.gs1.EAN-13' && lastScan !== timestamp) {
+      lastScan = timestamp;
+      const temp = e;
+      delete temp.type;
+      Vibration.vibrate();
+      Actions.barcodeResult(temp);
+    }
+    // if (e.data !== this.state.barcode || e.type !== this.state.type) {}
+
+    this.setState({
+      barcode: e.data,
+      text: `${e.data} (${e.type})`,
+      type: e.type,
+    });
+  }
+
   takePicture() {
     this.camera.capture()
       .then((data) => {
@@ -125,6 +146,7 @@ export default class BadInstagramCloneApp extends Component {
           captureAudio={false}
           aspect={Camera.constants.Aspect.fill}
           captureTarget={Camera.constants.CaptureTarget.temp}
+          onBarCodeRead={data => this.onBarCodeRead(data)}
         >
           <View style={styles.rectangleContainer}>
             <View style={styles.rectangle} />
