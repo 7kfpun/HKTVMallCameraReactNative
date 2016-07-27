@@ -23,7 +23,8 @@ import Egg from 'react-native-egg';
 
 // Components
 import LabelsCell from './../components/labels-cell';
-import LogosCell from './../components/logos-cell';
+import LogoCell from './../components/logo-cell';
+import TextCell from './../components/text-cell';
 import MallCell from './../components/mall-cell';
 
 import { config } from './../config';
@@ -89,7 +90,7 @@ export default class HKTVMallCamera extends Component {
       )
       .then((response) => response.json())
       .then((json) => {
-        console.log(json);
+        console.log('Google vision', json);
         const name = json.name;
         fetch(`https://vision.googleapis.com/v1/images:annotate?key=${gcloudVision}`, {
           method: 'POST',
@@ -105,16 +106,16 @@ export default class HKTVMallCamera extends Component {
                 features: [
                   {
                     type: 'LABEL_DETECTION',
-                    maxResults: 15,
+                    maxResults: 10,
                   },
                   {
                     type: 'LOGO_DETECTION',
                     maxResults: 5,
                   },
-                  // {
-                  //   type: 'TEXT_DETECTION',
-                  //   maxResults: 5,
-                  // },
+                  {
+                    type: 'TEXT_DETECTION',
+                    maxResults: 15,
+                  },
                 ],
               },
             ],
@@ -189,9 +190,10 @@ export default class HKTVMallCamera extends Component {
           </View>}
           {this.state.vision && <View style={styles.results}>
             {this.state.logoAnnotations && <View style={{ flexDirection: 'row' }}>
-              <LogosCell elements={this.state.logoAnnotations} />
+              <LogoCell elements={this.state.logoAnnotations} />
             </View>}
             {this.state.isDeveloper && this.state.labelAnnotations && <LabelsCell elements={this.state.labelAnnotations} />}
+            {this.state.textAnnotations && <TextCell elements={this.state.textAnnotations} />}
             {query !== '' && <MallCell query={query} filename={this.state.filename} />}
           </View>}
         </ScrollView>

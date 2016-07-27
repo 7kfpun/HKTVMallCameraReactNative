@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class LogosCell extends Component {
+export default class LogoCell extends Component {
   render() {
     return (
       <View style={styles.container}>
@@ -33,10 +33,10 @@ export default class LogosCell extends Component {
   }
 }
 
-LogosCell.propTypes = {
+LogoCell.propTypes = {
   elements: React.PropTypes.array,
 };
 
-LogosCell.defaultProps = {
+LogoCell.defaultProps = {
   elements: ['tag'],
 };
