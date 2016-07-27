@@ -68,28 +68,11 @@ export default class TextCell extends Component {
             onPress={() => this.searchGoogle(el.description)}
           >
             <Icon name="search" size={22} color="#616161" onPress={() => console.log()} />
-            {el.description.length > 18 ? `${el.description.substring(0, 18 - 3).replace('\n', ' ')}...` : el.description.replace('\n', ' ')}
+            {el.description.length > 18 ? `${el.description.substring(0, 18 - 3).replace(/(?:\r\n|\r|\n)/g, ' ')}...` : el.description.replace(/(?:\r\n|\r|\n)/g, ' ')}
           </Button>
         )}
       </View>
     );
-
-    // return (
-    //   <View>
-    //     {Array.isArray(this.props.elements) && this.props.elements.splice(0, 1).map((el, i) =>
-    //       <View key={i} style={styles.container}>
-    //         <Icon style={styles.icon} name="search" size={30} color="#616161" onPress={() => console.log()} />
-    //         <Text
-    //           key={i}
-    //           style={styles.text}
-    //           onPress={() => this.copyText(el.description)}
-    //         >
-    //           {el.description}
-    //         </Text>
-    //       </View>
-    //     )}
-    //   </View>
-    // );
   }
 }
 

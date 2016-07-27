@@ -90,7 +90,7 @@ export default class HKTVMallCamera extends Component {
       )
       .then((response) => response.json())
       .then((json) => {
-        console.log('Google vision', json);
+        console.log('Google bucket', json);
         const name = json.name;
         fetch(`https://vision.googleapis.com/v1/images:annotate?key=${gcloudVision}`, {
           method: 'POST',
@@ -123,7 +123,7 @@ export default class HKTVMallCamera extends Component {
         })
         .then((response) => response.json())
         .then((jjson) => {
-          console.log(jjson);
+          console.log('Google vision', jjson);
           that.setState({ vision: jjson });
 
           if (jjson.responses && jjson.responses.length) {
@@ -137,6 +137,7 @@ export default class HKTVMallCamera extends Component {
 
               firebase.database().ref(`app/images/${filename}`.replace('.jpg', '')).set({
                 uniqueID,
+                bucket: json,
                 vision: jjson.responses[0],
                 timestamp: new Date().getTime(),
               });
