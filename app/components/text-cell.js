@@ -37,7 +37,7 @@ export default class TextCell extends Component {
   // }
 
   searchGoogle(query) {
-    const encodedQuery = encodeURIComponent(query.substring(0, 1000));
+    const encodedQuery = encodeURIComponent(query);
     const googleUrl = `https://www.google.com/search?q=${encodedQuery}&utm_source=MallCamByFrontn.com&utm_medium=app`;
     try {
       SafariView.isAvailable()
@@ -65,7 +65,7 @@ export default class TextCell extends Component {
             key={i}
             style={styles.buttonStyle}
             textStyle={styles.buttonText}
-            onPress={() => this.searchGoogle(el.description)}
+            onPress={() => this.searchGoogle(el.description.substring(0, 500).replace(/(?:\r\n|\r|\n)/g, ' '))}
           >
             <Icon name="search" size={22} color="#616161" onPress={() => console.log()} />
             {el.description.length > 18 ? `${el.description.substring(0, 18 - 3).replace(/(?:\r\n|\r|\n)/g, ' ')}...` : el.description.replace(/(?:\r\n|\r|\n)/g, ' ')}
