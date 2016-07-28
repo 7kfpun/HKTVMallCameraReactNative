@@ -5,6 +5,8 @@ import {
   Image,
   ScrollView,
   StyleSheet,
+  Text,
+  TouchableHighlight,
   View,
 } from 'react-native';
 
@@ -67,7 +69,7 @@ const styles = StyleSheet.create({
     margin: 50,
   },
   results: {
-    padding: 10,
+    paddingHorizontal: 10,
   },
   buttonText: {
     color: '#616161',
@@ -81,6 +83,33 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5F5F5',
     borderColor: '#616161',
   },
+  shopBlock: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    margin: 5,
+  },
+  shopIcon: {
+    flex: 1,
+    flexDirection: 'row',
+    paddingHorizontal: 8,
+    alignItems: 'center',
+  },
+  selectedShopIcon: {
+    borderWidth: 2,
+    borderColor: '#616161',
+    borderRadius: 6,
+    backgroundColor: 'white',
+  },
+  shopImage: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    margin: 5,
+  },
+  shopText: {
+    color: '#616161',
+    fontSize: 12,
+  },
 });
 
 export default class HKTVMallCamera extends Component {
@@ -89,6 +118,7 @@ export default class HKTVMallCamera extends Component {
 
     this.state = {
       isCollapsed: false,
+      shop: 'HKTVMALL',
     };
   }
 
@@ -202,9 +232,8 @@ export default class HKTVMallCamera extends Component {
       if (labels.length === 0 && query === '') {
         labels = this.state.labelAnnotations.map((el) => el.description);
       }
-      labels = labels.splice(0, 5);
-      query += ' ';
-      query += labels.join();
+      labels = labels.splice(0, 3);
+      query += labels.join(' ');
     }
     console.log('Query:', query);
     this.setState({ query });
@@ -214,8 +243,9 @@ export default class HKTVMallCamera extends Component {
     const buttons = [];
     const { logoAnnotations, textAnnotations, labelAnnotations } = this.state;
 
+    const MIN_TAGS = 5;
     if (logoAnnotations) {
-      for (let index = 0; index < Math.min(3, logoAnnotations.length); index++) {
+      for (let index = 0; index < Math.min(MIN_TAGS, logoAnnotations.length); index++) {
         buttons.push(
           <Button
             key={index}
@@ -229,10 +259,10 @@ export default class HKTVMallCamera extends Component {
       }
     }
     if (labelAnnotations) {
-      for (let index = 0; index < Math.min(3, labelAnnotations.length); index++) {
+      for (let index = 0; index < Math.min(MIN_TAGS, labelAnnotations.length); index++) {
         buttons.push(
           <Button
-            key={3 + index}
+            key={MIN_TAGS + index}
             style={[styles.buttonStyle]}
             textStyle={styles.buttonText}
             onPress={() => this.setState({ query: labelAnnotations[index].description, key: Math.random() })}
@@ -244,10 +274,10 @@ export default class HKTVMallCamera extends Component {
     }
     if (textAnnotations) {
       const texts = textAnnotations[0].description.split('\n').filter(item => item);
-      for (let index = 0; index < Math.min(3, texts.length); index++) {
+      for (let index = 0; index < Math.min(MIN_TAGS, texts.length); index++) {
         buttons.push(
           <Button
-            key={6 + index}
+            key={MIN_TAGS * 2 + index}
             style={[styles.buttonStyle]}
             textStyle={styles.buttonText}
             onPress={() => this.setState({ query: texts[index], key: Math.random() })}
@@ -304,6 +334,26 @@ export default class HKTVMallCamera extends Component {
               source={{ uri: this.props.data.path }}
             />
           </Egg>
+          <View style={styles.shopBlock}>
+            <TouchableHighlight onPress={() => this.setState({ shop: 'HKTVMALL', key: Math.random() })} underlayColor="#E0E0E0">
+              <View style={[styles.shopIcon, this.state.shop === 'HKTVMALL' ? styles.selectedShopIcon : null]}>
+                <Image
+                  style={styles.shopImage}
+                  source={require('./../../assets/hktvmall.png')}  // eslint-disable-line global-require
+                />
+                <Text style={styles.shopText}>HKTVmall</Text>
+              </View>
+            </TouchableHighlight>
+            <TouchableHighlight onPress={() => this.setState({ shop: 'PARKNSHOP', key: Math.random() })} underlayColor="#E0E0E0">
+              <View style={[styles.shopIcon, this.state.shop === 'PARKNSHOP' ? styles.selectedShopIcon : null]}>
+                <Image
+                  style={styles.shopImage}
+                  source={require('./../../assets/parknshop.png')}  // eslint-disable-line global-require
+                />
+                <Text style={styles.shopText}>ParknShop</Text>
+              </View>
+            </TouchableHighlight>
+          </View>
           {!this.state.vision && <View style={styles.loading}>
             <Spinner style={styles.spinner} isVisible={this.state.isVisible} size={40} type={'Pulse'} color={'#424242'} />
           </View>}
@@ -313,7 +363,7 @@ export default class HKTVMallCamera extends Component {
             </View>}
             {this.state.isDeveloper && this.state.labelAnnotations && <LabelsCell elements={this.state.labelAnnotations} />}
             {this.state.textAnnotations && <TextCell elements={this.state.textAnnotations} />} */}
-            {this.state.query && <MallCell key={this.state.key} query={this.state.query} filename={this.state.filename} />}
+            {this.state.query && <MallCell key={this.state.key} shop={this.state.shop} query={this.state.query} filename={this.state.filename} />}
           </View>}
         </ScrollView>}
         <Icon name="keyboard-arrow-left" style={styles.back} size={30} color="#616161" onPress={() => Actions.pop()} />

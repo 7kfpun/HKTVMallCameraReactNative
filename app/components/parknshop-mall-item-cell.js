@@ -9,8 +9,6 @@ import {
   View,
 } from 'react-native';
 
-import striptags from 'striptags';
-
 // 3rd party libraries
 import GoogleAnalytics from 'react-native-google-analytics-bridge';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -65,35 +63,35 @@ const styles = StyleSheet.create({
 
 export default class MallItemCell extends Component {
   onOpenUrl(url) {
-    // const hktvUrl = `https://www.hktvmall.com/${url}?utm_source=MallCamByFrontn.com&utm_medium=app&utm_term=MayIHaveAShortMeetingWithYou&utm_content=hey@frontn.com&utm_campaign=HiRickyWong&ref=MayIHaveAShortMeetingWithYou`;  // eslint-disable-line max-len
-    const hktvUrl = `https://www.hktvmall.com/${url}?utm_source=MallCamByFrontn.com&utm_medium=app&utm_campaign=HiRickyWong`;
+    const parknshopUrl = `https://www.parknshop.com${url}?utm_source=MallCamByFrontn.com&utm_medium=app&utm_campaign=HiLiKaShing`;
+    console.log(parknshopUrl);
     try {
       SafariView.isAvailable()
         .then(SafariView.show({
-          url: hktvUrl,
+          url: parknshopUrl,
         }))
         .catch(err => {
           console.error('Cannot open safari', err);
         });
     } catch (err) {
-      Linking.openURL(hktvUrl)
+      Linking.openURL(parknshopUrl)
         .catch(err1 => {
           console.error('Cannot open url', err1);
         });
     }
-    GoogleAnalytics.trackEvent('user-action', 'open-hktvmall-item-url');
+    GoogleAnalytics.trackEvent('user-action', 'open-parknshop-item-url');
   }
 
   onShare(item) {
     Share.open({
-      share_subject: item.itemName,
-      share_text: item.summary,
-      share_URL: `https://www.hktvmall.com/${item.url}?utm_source=MallCamByFrontn.com&utm_medium=app&utm_campaign=HiRickyWong`,
+      share_subject: item.dl[0].dt.span[0].content.replace(/(?:\r\n|\r|\n|\s)/g, ''),
+      share_text: item.dl[0].dt.a.content.replace(/(?:\r\n|\r|\n|\s)/g, ''),
+      share_URL: `https://www.parknshop.com${item.dl[0].dd.a.img.src}?utm_source=MallCamByFrontn.com&utm_medium=app&utm_campaign=HiLiKaShing`,
       title: 'Share Link',
     }, (err) => {
       console.log(err);
     });
-    GoogleAnalytics.trackEvent('user-action', 'share-hktvmall-item');
+    GoogleAnalytics.trackEvent('user-action', 'share-parknshop-item');
   }
 
   onSave(item) {
@@ -113,30 +111,23 @@ export default class MallItemCell extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <TouchableHighlight onPress={() => this.onOpenUrl(this.props.item.url)} underlayColor="#E0E0E0">
+        <TouchableHighlight onPress={() => this.onOpenUrl(this.props.item.dl[0].dd.a.href)} underlayColor="#E0E0E0">
           <View style={styles.body}>
-            {this.props.item.images && this.props.item.images.length > 0 && <Image
+            <Image
               style={styles.image}
-              source={{ uri: this.props.item.images[0].url.startsWith('http') ?
-                          this.props.item.images[0].url.replace('http', 'https')
-                          :
-                          `https://www.hktvmall.com${this.props.item.images[0].url}`,
-                        }}
-            />}
+              source={{ uri: `https://www.parknshop.com/${this.props.item.dl[0].dd.a.img.src}` }}
+            />
             <View style={styles.details}>
               <Text style={styles.itemName}>
-                {this.props.item.brandName} - {this.props.item.name}
+                {this.props.item.dl[0].dt.strong.replace(/(?:\r\n|\r|\n|\s)/g, '')} - {this.props.item.dl[0].dt.span[0].content.replace(/(?:\r\n|\r|\n|\s)/g, '')}
               </Text>
               <Text style={styles.itemSummary}>
-                {striptags(this.props.item.summary)}
-              </Text>
-              <Text style={styles.itemPrice}>
-                {this.props.item.price && this.props.item.price.formattedValue}
+                {this.props.item.dl[0].dt.a.content.replace(/(?:\r\n|\r|\n|\s)/g, '')}
               </Text>
 
               <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
                 <Icon name="share" style={styles.option} size={20} color="#757575" onPress={() => this.onShare(this.props.item)} />
-                <Icon name="bookmark-border" style={styles.option} size={20} color="#757575" onPress={() => this.onSave(this.props.item)} />
+                {/* <Icon name="bookmark-border" style={styles.option} size={20} color="#757575" onPress={() => this.onSave(this.props.item)} /> */}
               </View>
             </View>
           </View>

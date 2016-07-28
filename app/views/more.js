@@ -174,7 +174,7 @@ export default class MoreView extends Component {
               />}
             </Section>
 
-            {/* <Section>
+            <Section>
               <Cell
                 cellstyle="RightDetail"
                 title="Clear all"
@@ -190,7 +190,7 @@ export default class MoreView extends Component {
                   ]
                 )}
               />
-            </Section> */}
+            </Section>
 
             <Section header="INFO">
               <Cell
