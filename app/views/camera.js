@@ -28,31 +28,20 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').height,
     width: Dimensions.get('window').width,
   },
-  rectangleContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
-  },
-  rectangle: {
-    height: Dimensions.get('window').width - 40,
-    width: Dimensions.get('window').width - 40,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: 'white',
-    backgroundColor: 'transparent',
+  cameraIcons: {
+    width: Dimensions.get('window').width - 30,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
   },
   capture: {
     marginBottom: 20,
   },
   library: {
-    position: 'absolute',
-    left: 25,
-    bottom: 25,
+    marginBottom: 25,
   },
   moreButton: {
-    position: 'absolute',
-    right: 25,
-    bottom: 25,
+    marginBottom: 25,
   },
 });
 
@@ -148,13 +137,12 @@ export default class BadInstagramCloneApp extends Component {
           captureTarget={Camera.constants.CaptureTarget.temp}
           onBarCodeRead={data => this.onBarCodeRead(data)}
         >
-          <View style={styles.rectangleContainer}>
-            <View style={styles.rectangle} />
+          <View style={styles.cameraIcons}>
+            <Icon name="photo-library" style={styles.library} size={26} color="white" onPress={() => this.pickImage()} />
+            <Icon name="photo-camera" style={styles.capture} size={52} color="white" onPress={() => this.takePicture()} />
+            <Icon name="format-list-bulleted" style={styles.moreButton} size={28} color="white" onPress={() => Actions.more()} />
           </View>
-          <Icon name="photo-camera" style={styles.capture} size={52} color="white" onPress={() => this.takePicture()} />
         </Camera>}
-        <Icon name="photo-library" style={styles.library} size={26} color="white" onPress={() => this.pickImage()} />
-        <Icon name="format-list-bulleted" style={styles.moreButton} size={28} color="white" onPress={() => Actions.more()} />
       </View>
     );
   }

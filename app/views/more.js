@@ -95,7 +95,7 @@ export default class MoreView extends Component {
   prepareSavedItems() {
     const that = this;
     store.get('Product').then(Product => {
-      if (Product.length > 0) {
+      if (Product && Product.length > 0) {
         that.setState({
           dataSource: that.state.dataSource.cloneWithRows(Product),
           hasSaved: true,
