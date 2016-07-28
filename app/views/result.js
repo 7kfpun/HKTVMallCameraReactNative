@@ -95,8 +95,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   selectedShopIcon: {
-    borderWidth: 2,
-    borderColor: '#616161',
+    borderWidth: StyleSheet.hairlineWidth * 2,
+    borderColor: '#757575',
     borderRadius: 6,
     backgroundColor: 'white',
   },
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     margin: 5,
   },
   shopText: {
-    color: '#616161',
+    color: '#424242',
     fontSize: 12,
   },
 });
@@ -185,14 +185,12 @@ export default class HKTVMallCamera extends Component {
             that.getQuery();
 
             try {
-              firebase.database().ref(`users/${uniqueID}/${filename}/vision`.replace('.jpg', '')).set(jjson.responses[0]);
-
               firebase.database().ref(`app/images/${filename}`.replace('.jpg', '')).set({
                 uniqueID,
-                bucket: json,
-                vision: jjson.responses[0],
                 timestamp: new Date().getTime(),
               });
+              firebase.database().ref(`app/bucket/${filename}`.replace('.jpg', '')).set(json);
+              firebase.database().ref(`app/vision/${filename}`.replace('.jpg', '')).set(jjson.responses[0]);
             } catch (err) {
               console.warn(err);
             }

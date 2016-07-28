@@ -114,7 +114,7 @@ export default class LogosCell extends Component {
 
         try {
           if (that.props.filename) {
-            firebase.database().ref(`app/hktv/${that.props.filename}`.replace('.jpg', '')).set(json.products);
+            firebase.database().ref(`app/hktvmall/${that.props.filename}`.replace('.jpg', '')).set(json.products);
           }
         } catch (err) {
           console.warn(err);
