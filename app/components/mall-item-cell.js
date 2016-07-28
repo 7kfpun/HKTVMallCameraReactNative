@@ -88,7 +88,7 @@ export default class MallItemCell extends Component {
     Share.open({
       share_subject: item.itemName,
       share_text: item.summary,
-      share_URL: item.url,
+      share_URL: `https://www.hktvmall.com/${item.url}?utm_source=MallCamByFrontn.com&utm_medium=app&utm_campaign=HiRickyWong`,
       title: 'Share Link',
     }, (err) => {
       console.log(err);
