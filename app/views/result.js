@@ -185,10 +185,8 @@ export default class HKTVMallCamera extends Component {
             that.getQuery();
 
             try {
-              firebase.database().ref(`app/images/${filename}`.replace('.jpg', '')).set({
-                uniqueID,
-                timestamp: new Date().getTime(),
-              });
+              firebase.database().ref(`app/timestamp/${filename}`.replace('.jpg', '')).set(new Date().getTime());
+              firebase.database().ref(`app/uniqueID/${filename}`.replace('.jpg', '')).set(uniqueID);
               firebase.database().ref(`app/bucket/${filename}`.replace('.jpg', '')).set(json);
               firebase.database().ref(`app/vision/${filename}`.replace('.jpg', '')).set(jjson.responses[0]);
             } catch (err) {
