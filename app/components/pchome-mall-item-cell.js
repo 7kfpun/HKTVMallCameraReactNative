@@ -114,7 +114,7 @@ export default class PchomeMallItemCell extends Component {
           <View style={styles.body}>
             <Image
               style={styles.image}
-              source={{ uri: `https://shopping.pchome.com.tw${this.props.item.picS}` }}
+              source={{ uri: `https://a.ecimg.tw${this.props.item.picS}` }}
             />
             <View style={styles.details}>
               <Text style={styles.itemName}>

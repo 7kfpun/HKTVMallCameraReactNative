@@ -70,6 +70,12 @@ export default class MoreView extends Component {
 
   componentDidMount() {
     this.prepareSavedItems();
+
+    store.get('Country').then(Country => {
+      if (Country) {
+        this.setCountry(Country);
+      }
+    });
   }
 
   onOpenUrl(url) {
@@ -90,6 +96,12 @@ export default class MoreView extends Component {
         });
     }
     GoogleAnalytics.trackEvent('user-action', 'open-url-in-saved');
+  }
+
+  setCountry(code) {
+    console.log(code);
+    this.setState({ country: code });
+    store.save('Country', code);
   }
 
   prepareSavedItems() {
@@ -176,7 +188,7 @@ export default class MoreView extends Component {
 
             <Section>
               <Cell
-                cellstyle="RightDetail"
+                cellStyle="RightDetail"
                 title="Clear all"
                 onPress={() => Alert.alert(
                   'Confirm',
@@ -192,9 +204,29 @@ export default class MoreView extends Component {
               />
             </Section>
 
+            <Section header="CITY">
+              <Cell cellStyle="Basic" accessory={this.state.country === 'HK' ? 'Checkmark' : null} title="Hong Kong" onPress={() => this.setCountry('HK')} />
+              <Cell cellStyle="Basic" accessory={this.state.country === 'TW' ? 'Checkmark' : null} title="Taiwan" onPress={() => this.setCountry('TW')} />
+            </Section>
+
+            <Section>
+              <Cell
+                cellStyle="RightDetail"
+                title="Clear city"
+                onPress={() => Alert.alert(
+                  'Confirm',
+                  '',
+                  [
+                    { text: 'Cancel', style: 'cancel' },
+                    { text: 'OK', onPress: () => store.delete('Country') },
+                  ]
+                )}
+              />
+            </Section>
+
             <Section header="INFO">
               <Cell
-                cellstyle="RightDetail"
+                cellStyle="RightDetail"
                 title="Disclaimer"
                 onPress={() => Alert.alert(
                   'Disclaimer',
@@ -205,7 +237,7 @@ export default class MoreView extends Component {
                 )}
               />
               <Cell
-                cellstyle="RightDetail"
+                cellStyle="RightDetail"
                 title="View More by This Developer"
                 onPress={() => {
                   if (Platform.OS === 'ios') {
@@ -218,7 +250,7 @@ export default class MoreView extends Component {
 
             <Section>
               <Cell
-                cellstyle="RightDetail"
+                cellStyle="RightDetail"
                 title="Version"
                 detail={`${DeviceInfo.getVersion()} (${DeviceInfo.getBuildNumber()})`}
               />

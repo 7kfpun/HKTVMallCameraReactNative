@@ -24,6 +24,7 @@ import ImageResizer from 'react-native-image-resizer'; // eslint-disable-line im
 import RNFetchBlob from 'react-native-fetch-blob';
 import Share from 'react-native-share';
 import Spinner from 'react-native-spinkit';
+import store from 'react-native-simple-store';
 
 // Components
 // import LabelsCell from './../components/labels-cell';
@@ -118,11 +119,21 @@ export default class HKTVMallCamera extends Component {
 
     this.state = {
       isCollapsed: false,
-      shop: 'HKTVMALL',
     };
   }
 
   componentDidMount() {
+    store.get('Country').then(Country => {
+      if (Country) {
+        this.setState({ country: Country });
+        if (Country === 'HK') {
+          this.setState({ shop: 'HKTVMALL' });
+        } else if (Country === 'TW') {
+          this.setState({ shop: 'PCHOME' });
+        }
+      }
+    });
+
     console.log('componentDidMount', this.props.data);
 
     const that = this;
@@ -331,7 +342,7 @@ export default class HKTVMallCamera extends Component {
             />
           </Egg>
           <View style={styles.shopBlock}>
-            <TouchableHighlight onPress={() => this.setState({ shop: 'HKTVMALL', key: Math.random() })} underlayColor="#E0E0E0">
+            {this.state.country === 'HK' && <TouchableHighlight onPress={() => this.setState({ shop: 'HKTVMALL', key: Math.random() })} underlayColor="#E0E0E0">
               <View style={[styles.shopIcon, this.state.shop === 'HKTVMALL' ? styles.selectedShopIcon : null]}>
                 <Image
                   style={styles.shopImage}
@@ -339,8 +350,8 @@ export default class HKTVMallCamera extends Component {
                 />
                 <Text style={styles.shopText}>HKTVmall</Text>
               </View>
-            </TouchableHighlight>
-            <TouchableHighlight onPress={() => this.setState({ shop: 'PARKNSHOP', key: Math.random() })} underlayColor="#E0E0E0">
+            </TouchableHighlight>}
+            {this.state.country === 'HK' && <TouchableHighlight onPress={() => this.setState({ shop: 'PARKNSHOP', key: Math.random() })} underlayColor="#E0E0E0">
               <View style={[styles.shopIcon, this.state.shop === 'PARKNSHOP' ? styles.selectedShopIcon : null]}>
                 <Image
                   style={styles.shopImage}
@@ -348,8 +359,8 @@ export default class HKTVMallCamera extends Component {
                 />
                 <Text style={styles.shopText}>ParknShop</Text>
               </View>
-            </TouchableHighlight>
-            <TouchableHighlight onPress={() => this.setState({ shop: 'PCHOME', key: Math.random() })} underlayColor="#E0E0E0">
+            </TouchableHighlight>}
+            {this.state.country === 'TW' && <TouchableHighlight onPress={() => this.setState({ shop: 'PCHOME', key: Math.random() })} underlayColor="#E0E0E0">
               <View style={[styles.shopIcon, this.state.shop === 'PCHOME' ? styles.selectedShopIcon : null]}>
                 <Image
                   style={styles.shopImage}
@@ -357,8 +368,8 @@ export default class HKTVMallCamera extends Component {
                 />
                 <Text style={styles.shopText}>PChome</Text>
               </View>
-            </TouchableHighlight>
-            <TouchableHighlight onPress={() => this.setState({ shop: 'BOOKS', key: Math.random() })} underlayColor="#E0E0E0">
+            </TouchableHighlight>}
+            {this.state.country === 'TW' && <TouchableHighlight onPress={() => this.setState({ shop: 'BOOKS', key: Math.random() })} underlayColor="#E0E0E0">
               <View style={[styles.shopIcon, this.state.shop === 'BOOKS' ? styles.selectedShopIcon : null]}>
                 <Image
                   style={styles.shopImage}
@@ -366,7 +377,7 @@ export default class HKTVMallCamera extends Component {
                 />
                 <Text style={styles.shopText}>博客來</Text>
               </View>
-            </TouchableHighlight>
+            </TouchableHighlight>}
           </View>
           {!this.state.vision && <View style={styles.loading}>
             <Spinner style={styles.spinner} isVisible={this.state.isVisible} size={40} type={'Pulse'} color={'#424242'} />

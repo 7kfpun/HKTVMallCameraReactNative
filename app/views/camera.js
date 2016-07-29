@@ -14,6 +14,7 @@ import Camera from 'react-native-camera';
 import GoogleAnalytics from 'react-native-google-analytics-bridge';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Permissions from 'react-native-permissions';  // eslint-disable-line import/no-unresolved
+import store from 'react-native-simple-store';
 
 let lastScan;
 
@@ -109,21 +110,66 @@ export default class BadInstagramCloneApp extends Component {
   }
 
   takePicture() {
-    this.camera.capture()
-      .then((data) => {
-        console.log(data);
-        Actions.result({ data });
-        GoogleAnalytics.trackEvent('user-action', 'take-picture');
-      })
-      .catch(err => console.error(err));
+    this.camera.capture().then((data) => {
+      console.log(data);
+      if (data) {
+        store.get('Country').then(Country => {
+          if (Country) {
+            Actions.result({ data });
+            GoogleAnalytics.trackEvent('user-action', 'take-picture');
+          } else {
+            Alert.alert(
+              'Select your location',
+              '',
+              [
+                { text: 'Hong Kong', onPress: () => {
+                  store.save('Country', 'HK');
+                  Actions.result({ data });
+                  GoogleAnalytics.trackEvent('user-action', 'take-picture');
+                } },
+                { text: 'Taiwan', onPress: () => {
+                  store.save('Country', 'TW');
+                  Actions.result({ data });
+                  GoogleAnalytics.trackEvent('user-action', 'take-picture');
+                } },
+                { text: 'Cancel', style: 'cancel' },
+              ]
+            );
+          }
+        });
+      }
+    })
+    .catch(err => console.error(err));
   }
 
   pickImage() {
     ImagePickerIOS.openSelectDialog({}, (response) => {
       console.log(response);
       if (response) {
-        Actions.result({ data: { path: response } });
-        GoogleAnalytics.trackEvent('user-action', 'pick-image');
+        store.get('Country').then(Country => {
+          if (Country) {
+            Actions.result({ data: { path: response } });
+            GoogleAnalytics.trackEvent('user-action', 'pick-image');
+          } else {
+            Alert.alert(
+              'Select your location',
+              '',
+              [
+                { text: 'Hong Kong', onPress: () => {
+                  store.save('Country', 'HK');
+                  Actions.result({ data: { path: response } });
+                  GoogleAnalytics.trackEvent('user-action', 'pick-image');
+                } },
+                { text: 'Taiwan', onPress: () => {
+                  store.save('Country', 'TW');
+                  Actions.result({ data: { path: response } });
+                  GoogleAnalytics.trackEvent('user-action', 'pick-image');
+                } },
+                { text: 'Cancel', style: 'cancel' },
+              ]
+            );
+          }
+        });
       }
     }, (err) => console.log(err));
   }
