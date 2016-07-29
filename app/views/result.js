@@ -111,6 +111,14 @@ const styles = StyleSheet.create({
     color: '#424242',
     fontSize: 12,
   },
+  tagsBar: {
+    height: 40,
+    backgroundColor: '#616161',
+    // justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 10,
+    flexDirection: 'row',
+  },
 });
 
 export default class HKTVMallCamera extends Component {
@@ -394,7 +402,7 @@ export default class HKTVMallCamera extends Component {
         <Icon name="keyboard-arrow-left" style={styles.back} size={30} color="#616161" onPress={() => Actions.pop()} />
 
         <Collapsible collapsed={this.state.isCollapsed}>
-          <View style={{ height: 40, backgroundColor: '#616161', justifyContent: 'space-between', alignItems: 'center', padding: 10, flexDirection: 'row' }}>
+          <View style={styles.tagsBar}>
             <ScrollView
               style={{ flexDirection: 'row' }}
               horizontal={true}
@@ -402,7 +410,7 @@ export default class HKTVMallCamera extends Component {
             >
               {this.getTags()}
             </ScrollView>
-            <Icon name="more-vert" size={26} color="white" onPress={() => console.log()} />
+            {/* <Icon name="more-vert" size={26} color="white" onPress={() => console.log()} /> */}
           </View>
         </Collapsible>
       </View>

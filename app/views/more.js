@@ -209,7 +209,7 @@ export default class MoreView extends Component {
               <Cell cellStyle="Basic" accessory={this.state.country === 'TW' ? 'Checkmark' : null} title="Taiwan" onPress={() => this.setCountry('TW')} />
             </Section>
 
-            <Section>
+            {/* <Section>
               <Cell
                 cellStyle="RightDetail"
                 title="Clear city"
@@ -222,7 +222,7 @@ export default class MoreView extends Component {
                   ]
                 )}
               />
-            </Section>
+            </Section> */}
 
             <Section header="INFO">
               <Cell

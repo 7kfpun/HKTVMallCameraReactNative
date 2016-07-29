@@ -85,7 +85,7 @@ export default class MallItemCell extends Component {
   onShare(item) {
     Share.open({
       share_subject: item.dl[0].dt.span[0].content.replace(/(?:\r\n|\r|\n|\s)/g, ''),
-      share_text: item.dl[0].dt.a.content.replace(/(?:\r\n|\r|\n|\s)/g, ''),
+      share_text: this.props.item.dl[0].dt.a.content && this.props.item.dl[0].dt.a.content.replace(/(?:\r\n|\r|\n|\s)/g, ''),
       share_URL: `https://www.parknshop.com${item.dl[0].dd.a.img.src}?utm_source=MallCamByFrontn.com&utm_medium=app&utm_campaign=HiLiKaShing`,
       title: 'Share Link',
     }, (err) => {
@@ -122,7 +122,7 @@ export default class MallItemCell extends Component {
                 {this.props.item.dl[0].dt.strong.replace(/(?:\r\n|\r|\n|\s)/g, '')} - {this.props.item.dl[0].dt.span[0].content.replace(/(?:\r\n|\r|\n|\s)/g, '')}
               </Text>
               <Text style={styles.itemSummary}>
-                {this.props.item.dl[0].dt.a.content.replace(/(?:\r\n|\r|\n|\s)/g, '')}
+                {this.props.item.dl[0].dt.a.content && this.props.item.dl[0].dt.a.content.replace(/(?:\r\n|\r|\n|\s)/g, '')}
               </Text>
 
               <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
