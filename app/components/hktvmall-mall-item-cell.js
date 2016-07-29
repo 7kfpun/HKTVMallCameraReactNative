@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class MallItemCell extends Component {
+export default class HktvmallMallItemCell extends Component {
   onOpenUrl(url) {
     // const hktvUrl = `https://www.hktvmall.com/${url}?utm_source=MallCamByFrontn.com&utm_medium=app&utm_term=MayIHaveAShortMeetingWithYou&utm_content=hey@frontn.com&utm_campaign=HiRickyWong&ref=MayIHaveAShortMeetingWithYou`;  // eslint-disable-line max-len
     const hktvUrl = `https://www.hktvmall.com/${url}?utm_source=MallCamByFrontn.com&utm_medium=app&utm_campaign=HiRickyWong`;
@@ -146,12 +146,12 @@ export default class MallItemCell extends Component {
   }
 }
 
-MallItemCell.propTypes = {
+HktvmallMallItemCell.propTypes = {
   item: React.PropTypes.object,
   rowID: React.PropTypes.string,
 };
 
-MallItemCell.defaultProps = {
+HktvmallMallItemCell.defaultProps = {
   item: {},
   rowID: '0',
 };

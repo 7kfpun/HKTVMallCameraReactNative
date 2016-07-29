@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
   shopIcon: {
     flex: 1,
     flexDirection: 'row',
-    paddingHorizontal: 8,
+    paddingHorizontal: 6,
     alignItems: 'center',
   },
   selectedShopIcon: {
@@ -347,6 +347,15 @@ export default class HKTVMallCamera extends Component {
                   source={require('./../../assets/parknshop.png')}  // eslint-disable-line global-require
                 />
                 <Text style={styles.shopText}>ParknShop</Text>
+              </View>
+            </TouchableHighlight>
+            <TouchableHighlight onPress={() => this.setState({ shop: 'PCHOME', key: Math.random() })} underlayColor="#E0E0E0">
+              <View style={[styles.shopIcon, this.state.shop === 'PCHOME' ? styles.selectedShopIcon : null]}>
+                <Image
+                  style={styles.shopImage}
+                  source={require('./../../assets/pchome.jpg')}  // eslint-disable-line global-require
+                />
+                <Text style={styles.shopText}>PChome</Text>
               </View>
             </TouchableHighlight>
           </View>

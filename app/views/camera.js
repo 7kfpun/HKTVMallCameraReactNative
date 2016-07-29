@@ -36,12 +36,17 @@ const styles = StyleSheet.create({
   },
   capture: {
     marginBottom: 20,
+    paddingTop: 50,
   },
   library: {
     marginBottom: 25,
+    paddingTop: 50,
+    paddingRight: 40,
   },
   moreButton: {
     marginBottom: 25,
+    paddingTop: 50,
+    paddingLeft: 40,
   },
 });
 

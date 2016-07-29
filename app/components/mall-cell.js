@@ -13,8 +13,9 @@ import firebase from 'firebase';
 import Spinner from 'react-native-spinkit';
 
 // Elements
-import MallItemCell from './mall-item-cell';
+import HktvmallMallItemCell from './hktvmall-mall-item-cell';
 import ParknshopMallItemCell from './parknshop-mall-item-cell';
+import PchomeMallItemCell from './pchome-mall-item-cell';
 
 const styles = StyleSheet.create({
   container: {
@@ -50,7 +51,49 @@ export default class LogosCell extends Component {
       this.searchHktvMall();
     } else if (this.props.shop === 'PARKNSHOP') {
       this.searchParknshop();
+    } else if (this.props.shop === 'PCHOME') {
+      this.searchPchome();
+    } else {
+      this.searchHktvMall();
     }
+  }
+
+  searchHktvMall() {
+    const query = encodeURIComponent(this.props.query);
+    const resultsForPage = 25;
+    const url = `https://www.hktvmall.com/hktv/zh/ajax/search_products?query=%22${query}%22%3Arelevance&pageSize=${resultsForPage}`;
+    console.log('encodeURIComponent', url);
+    const that = this;
+    fetch(url, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    })
+    .then((response) => response.json())
+    .then((json) => {
+      console.log(json);
+      if (json.products && json.products.length > 0) {
+        that.setState(Object.assign({}, json, {
+          dataSource: that.state.dataSource.cloneWithRows(json.products),
+          key: Math.random(),
+          hasResult: true,
+        }));
+
+        try {
+          if (that.props.filename) {
+            firebase.database().ref(`app/hktvmall/${that.props.filename}`.replace('.jpg', '')).set(json.products);
+          }
+        } catch (err) {
+          console.warn(err);
+        }
+      } else {
+        that.setState({ hasResult: false });
+      }
+
+      that.setState({ loading: false });
+    })
+    .catch((error) => {
+      console.warn(error);
+    });
   }
 
   searchParknshop() {
@@ -93,9 +136,10 @@ export default class LogosCell extends Component {
     });
   }
 
-  searchHktvMall() {
+  searchPchome() {
+    // http://ecshweb.pchome.com.tw/search/v3.3/all/results?q=books&page=1&sort=rnk/dc
     const query = encodeURIComponent(this.props.query);
-    const url = `https://www.hktvmall.com/hktv/zh/ajax/search_products?query=%22${query}%22%3Arelevance&pageSize=30`;
+    const url = `https://ecshweb.pchome.com.tw/search/v3.3/all/results?q=${query}&page=1&sort=rnk/dc`;
     console.log('encodeURIComponent', url);
     const that = this;
     fetch(url, {
@@ -105,16 +149,16 @@ export default class LogosCell extends Component {
     .then((response) => response.json())
     .then((json) => {
       console.log(json);
-      if (json.products && json.products.length > 0) {
+      if (json.prods && json.prods.length > 0) {
         that.setState(Object.assign({}, json, {
-          dataSource: that.state.dataSource.cloneWithRows(json.products),
+          dataSource: that.state.dataSource.cloneWithRows(json.prods),
           key: Math.random(),
           hasResult: true,
         }));
 
         try {
           if (that.props.filename) {
-            firebase.database().ref(`app/hktvmall/${that.props.filename}`.replace('.jpg', '')).set(json.products);
+            firebase.database().ref(`app/pchome/${that.props.filename}`.replace('.jpg', '')).set(json.prods);
           }
         } catch (err) {
           console.warn(err);
@@ -144,10 +188,14 @@ export default class LogosCell extends Component {
           dataSource={this.state.dataSource}
           renderRow={(rowData, sectionID, rowID) => {
             if (this.props.shop === 'HKTVMALL') {
-              return <MallItemCell item={rowData} rowID={rowID} />;
+              return <HktvmallMallItemCell item={rowData} rowID={rowID} />;
+            } else if (this.props.shop === 'PARKNSHOP') {
+              return <ParknshopMallItemCell item={rowData} rowID={rowID} />;
+            } else if (this.props.shop === 'PCHOME') {
+              return <PchomeMallItemCell item={rowData} rowID={rowID} />;
             }
 
-            return <ParknshopMallItemCell item={rowData} rowID={rowID} />;
+            return <HktvmallMallItemCell item={rowData} rowID={rowID} />;
           }}
         />}
       </View>
