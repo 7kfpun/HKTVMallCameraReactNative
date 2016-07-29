@@ -358,6 +358,15 @@ export default class HKTVMallCamera extends Component {
                 <Text style={styles.shopText}>PChome</Text>
               </View>
             </TouchableHighlight>
+            <TouchableHighlight onPress={() => this.setState({ shop: 'BOOKS', key: Math.random() })} underlayColor="#E0E0E0">
+              <View style={[styles.shopIcon, this.state.shop === 'BOOKS' ? styles.selectedShopIcon : null]}>
+                <Image
+                  style={styles.shopImage}
+                  source={require('./../../assets/books.png')}  // eslint-disable-line global-require
+                />
+                <Text style={styles.shopText}>博客來</Text>
+              </View>
+            </TouchableHighlight>
           </View>
           {!this.state.vision && <View style={styles.loading}>
             <Spinner style={styles.spinner} isVisible={this.state.isVisible} size={40} type={'Pulse'} color={'#424242'} />

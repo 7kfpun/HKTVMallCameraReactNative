@@ -16,6 +16,7 @@ import Spinner from 'react-native-spinkit';
 import HktvmallMallItemCell from './hktvmall-mall-item-cell';
 import ParknshopMallItemCell from './parknshop-mall-item-cell';
 import PchomeMallItemCell from './pchome-mall-item-cell';
+import BooksMallItemCell from './books-mall-item-cell';
 
 const styles = StyleSheet.create({
   container: {
@@ -47,12 +48,18 @@ export default class LogosCell extends Component {
   }
 
   componentDidMount() {
+    this.selectMall();
+  }
+
+  selectMall() {
     if (this.props.shop === 'HKTVMALL') {
       this.searchHktvMall();
     } else if (this.props.shop === 'PARKNSHOP') {
       this.searchParknshop();
     } else if (this.props.shop === 'PCHOME') {
       this.searchPchome();
+    } else if (this.props.shop === 'BOOKS') {
+      this.searchBooks();
     } else {
       this.searchHktvMall();
     }
@@ -174,6 +181,45 @@ export default class LogosCell extends Component {
     });
   }
 
+  searchBooks() {
+    const query = encodeURIComponent(this.props.query.replace(/\s/g, '+'));
+    console.log('encodeURIComponentquery', query);
+    // http://search.books.com.tw/search/query/cat/all/key/${query}
+    const url = `https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%22http%3A%2F%2Fsearch.books.com.tw%2Fsearch%2Fquery%2Fkey%2F${query}%22%20and%20xpath%3D%22%2F%2Ful%5B%40class%3D%5C'searchbook%5C'%5D%2F%2Fli%22&format=json&diagnostics=true&callback=`;    // eslint-disable-line max-len
+    console.log('encodeURIComponent', url);
+    const that = this;
+    fetch(url, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    })
+    .then((response) => response.json())
+    .then((json) => {
+      console.log(json);
+      if (json.query && json.query.results && json.query.count > 0) {
+        that.setState(Object.assign({}, json, {
+          dataSource: that.state.dataSource.cloneWithRows(json.query.count === 1 ? [json.query.results.li] : json.query.results.li),
+          key: Math.random(),
+          hasResult: true,
+        }));
+
+        try {
+          if (that.props.filename) {
+            firebase.database().ref(`app/parknshop/${that.props.filename}`.replace('.jpg', '')).set(json.query.results.li);
+          }
+        } catch (err) {
+          console.warn(err);
+        }
+      } else {
+        that.setState({ hasResult: false });
+      }
+
+      that.setState({ loading: false });
+    })
+    .catch((error) => {
+      console.warn(error);
+    });
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -193,6 +239,8 @@ export default class LogosCell extends Component {
               return <ParknshopMallItemCell item={rowData} rowID={rowID} />;
             } else if (this.props.shop === 'PCHOME') {
               return <PchomeMallItemCell item={rowData} rowID={rowID} />;
+            } else if (this.props.shop === 'BOOKS') {
+              return <BooksMallItemCell item={rowData} rowID={rowID} />;
             }
 
             return <HktvmallMallItemCell item={rowData} rowID={rowID} />;
