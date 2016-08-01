@@ -4,6 +4,8 @@ import {
   Dimensions,
   ImagePickerIOS,
   StyleSheet,
+  Text,
+  TouchableHighlight,
   Vibration,
   View,
 } from 'react-native';
@@ -15,6 +17,9 @@ import GoogleAnalytics from 'react-native-google-analytics-bridge';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Permissions from 'react-native-permissions';  // eslint-disable-line import/no-unresolved
 import store from 'react-native-simple-store';
+
+import { locale } from './../locale';
+const strings = locale.zh_Hant;
 
 let lastScan;
 
@@ -40,14 +45,23 @@ const styles = StyleSheet.create({
     paddingTop: 50,
   },
   library: {
-    marginBottom: 25,
+    marginBottom: 24,
     paddingTop: 50,
     paddingRight: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   moreButton: {
-    marginBottom: 25,
+    marginBottom: 24,
     paddingTop: 50,
     paddingLeft: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  text: {
+    color: 'white',
+    fontSize: 14,
+    marginTop: 5,
   },
 });
 
@@ -189,9 +203,21 @@ export default class BadInstagramCloneApp extends Component {
           onBarCodeRead={data => this.onBarCodeRead(data)}
         >
           <View style={styles.cameraIcons}>
-            <Icon name="photo-library" style={styles.library} size={26} color="white" onPress={() => this.pickImage()} />
+            <TouchableHighlight onPress={() => this.pickImage()} underlayColor="black">
+              <View style={styles.library}>
+                <Icon name="photo-library" size={26} color="white" />
+                <Text style={styles.text}>{strings.library}</Text>
+              </View>
+            </TouchableHighlight>
+
             <Icon name="photo-camera" style={styles.capture} size={52} color="white" onPress={() => this.takePicture()} />
-            <Icon name="format-list-bulleted" style={styles.moreButton} size={28} color="white" onPress={() => Actions.more()} />
+
+            <TouchableHighlight onPress={() => Actions.more()} underlayColor="black">
+              <View style={styles.moreButton}>
+                <Icon name="format-list-bulleted" size={26} color="white" />
+                <Text style={styles.text}>{strings.more}</Text>
+              </View>
+            </TouchableHighlight>
           </View>
         </Camera>}
       </View>

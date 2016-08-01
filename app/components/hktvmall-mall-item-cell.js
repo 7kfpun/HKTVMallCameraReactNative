@@ -19,6 +19,9 @@ import Share from 'react-native-share';
 import store from 'react-native-simple-store';
 import Toast from 'react-native-root-toast';
 
+import { locale } from './../locale';
+const strings = locale.zh_Hant;
+
 const styles = StyleSheet.create({
   container: {
     marginBottom: 10,
@@ -57,9 +60,19 @@ const styles = StyleSheet.create({
     color: '#424242',
     fontSize: 15,
   },
+  optionBlock: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
   option: {
     paddingTop: 10,
     paddingHorizontal: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  optionText: {
+    color: '#757575',
+    fontSize: 12,
   },
 });
 
@@ -134,9 +147,19 @@ export default class HktvmallMallItemCell extends Component {
                 {this.props.item.price && this.props.item.price.formattedValue}
               </Text>
 
-              <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-                <Icon name="share" style={styles.option} size={20} color="#757575" onPress={() => this.onShare(this.props.item)} />
-                <Icon name="bookmark-border" style={styles.option} size={20} color="#757575" onPress={() => this.onSave(this.props.item)} />
+              <View style={styles.optionBlock}>
+                <TouchableHighlight onPress={() => this.onShare(this.props.item)} underlayColor="white">
+                  <View style={styles.option}>
+                    <Icon name="share" size={20} color="#757575" />
+                    <Text style={styles.optionText}>{strings.share}</Text>
+                  </View>
+                </TouchableHighlight>
+                <TouchableHighlight onPress={() => this.onSave(this.props.item)} underlayColor="white">
+                  <View style={styles.option}>
+                    <Icon name="bookmark-border" size={20} color="#757575" />
+                    <Text style={styles.optionText}>{strings.save}</Text>
+                  </View>
+                </TouchableHighlight>
               </View>
             </View>
           </View>

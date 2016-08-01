@@ -4,7 +4,6 @@ import {
   Image,
   Linking,
   ListView,
-  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -21,6 +20,9 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import NavigationBar from 'react-native-navbar';
 import SafariView from 'react-native-safari-view';
 import store from 'react-native-simple-store';
+
+import { locale } from './../locale';
+const strings = locale.zh_Hant;
 
 const styles = StyleSheet.create({
   container: {
@@ -162,7 +164,7 @@ export default class MoreView extends Component {
         {this.renderToolbar()}
         <ScrollView>
           <TableView>
-            <Section header="SAVED">
+            <Section header={strings.saved.toUpperCase()}>
               {this.state.hasSaved && <ListView
                 key={this.state.key}
                 dataSource={this.state.dataSource}
@@ -186,7 +188,7 @@ export default class MoreView extends Component {
               />}
             </Section>
 
-            <Section>
+            {/* <Section>
               <Cell
                 cellStyle="RightDetail"
                 title="Clear all"
@@ -202,11 +204,11 @@ export default class MoreView extends Component {
                   ]
                 )}
               />
-            </Section>
+            </Section> */}
 
-            <Section header="CITY">
-              <Cell cellStyle="Basic" accessory={this.state.country === 'HK' ? 'Checkmark' : null} title="Hong Kong" onPress={() => this.setCountry('HK')} />
-              <Cell cellStyle="Basic" accessory={this.state.country === 'TW' ? 'Checkmark' : null} title="Taiwan" onPress={() => this.setCountry('TW')} />
+            <Section header={strings.location.toUpperCase()}>
+              <Cell cellStyle="Basic" accessory={this.state.country === 'HK' ? 'Checkmark' : null} title={strings.hong_kong} onPress={() => this.setCountry('HK')} />
+              <Cell cellStyle="Basic" accessory={this.state.country === 'TW' ? 'Checkmark' : null} title={strings.taiwan} onPress={() => this.setCountry('TW')} />
             </Section>
 
             {/* <Section>
@@ -224,19 +226,19 @@ export default class MoreView extends Component {
               />
             </Section> */}
 
-            <Section header="INFO">
+            <Section header={strings.info.toUpperCase()}>
               <Cell
                 cellStyle="RightDetail"
-                title="Disclaimer"
+                title={strings.disclaimer}
                 onPress={() => Alert.alert(
-                  'Disclaimer',
+                  strings.disclaimer,
                   '',
                   [
                     { text: 'OK', onPress: () => console.log('OK Pressed') },
                   ]
                 )}
               />
-              <Cell
+              {/* <Cell
                 cellStyle="RightDetail"
                 title="View More by This Developer"
                 onPress={() => {
@@ -245,13 +247,13 @@ export default class MoreView extends Component {
                   } else if (Platform.OS === 'android') {
                     Linking.openURL('https://play.google.com/store/apps/developer?id=Kf');
                   } }}
-              />
+              /> */}
             </Section>
 
             <Section>
               <Cell
                 cellStyle="RightDetail"
-                title="Version"
+                title={strings.version}
                 detail={`${DeviceInfo.getVersion()} (${DeviceInfo.getBuildNumber()})`}
               />
             </Section>

@@ -17,6 +17,9 @@ import DeviceInfo from 'react-native-device-info';
 import GoogleAnalytics from 'react-native-google-analytics-bridge';
 
 import { config } from './app/config';
+import { locale } from './app/locale';
+
+const strings = locale.zh_Hant;
 
 firebase.initializeApp(config.firebase);
 
@@ -31,7 +34,7 @@ const scenes = Actions.create(
     <Scene key="camera" title="Camera" component={Camera} hideNavBar={true} initial={true} />
     <Scene key="result" title="Result" component={Result} hideNavBar={true} />
     <Scene key="barcodeResult" title="Result" component={BarcodeResult} hideNavBar={true} />
-    <Scene key="more" title="More" component={More} hideNavBar={true} />
+    <Scene key="more" title={strings.more} component={More} hideNavBar={true} />
   </Scene>
 );
 
