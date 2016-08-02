@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class HKTVMallCamera extends Component {
+export default class BarcodeResultView extends Component {
   constructor(props) {
     super(props);
 
@@ -55,10 +55,10 @@ export default class HKTVMallCamera extends Component {
   }
 }
 
-HKTVMallCamera.propTypes = {
+BarcodeResultView.propTypes = {
   data: React.PropTypes.string,
 };
 
-HKTVMallCamera.defaultProps = {
+BarcodeResultView.defaultProps = {
   data: '',
 };

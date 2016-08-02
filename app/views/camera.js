@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class BadInstagramCloneApp extends Component {
+export default class CameraView extends Component {
   constructor(props) {
     super(props);
 

@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class LogosCell extends Component {
+export default class MallCell extends Component {
   constructor(props) {
     super(props);
 
@@ -251,14 +251,14 @@ export default class LogosCell extends Component {
   }
 }
 
-LogosCell.propTypes = {
+MallCell.propTypes = {
   elements: React.PropTypes.array,
   shop: React.PropTypes.string,
   query: React.PropTypes.string,
   filename: React.PropTypes.string,
 };
 
-LogosCell.defaultProps = {
+MallCell.defaultProps = {
   elements: ['tag'],
   shop: 'hktv',
 };

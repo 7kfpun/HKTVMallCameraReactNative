@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class HKTVMallCamera extends Component {
+export default class ResultView extends Component {
   constructor(props) {
     super(props);
 
@@ -418,10 +418,10 @@ export default class HKTVMallCamera extends Component {
   }
 }
 
-HKTVMallCamera.propTypes = {
+ResultView.propTypes = {
   data: React.PropTypes.object,
 };
 
-HKTVMallCamera.defaultProps = {
+ResultView.defaultProps = {
   data: {},
 };

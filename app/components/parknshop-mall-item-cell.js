@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class MallItemCell extends Component {
+export default class ParknshopMallItemCell extends Component {
   onOpenUrl(url) {
     const parknshopUrl = `https://www.parknshop.com${url}?utm_source=MallCamByFrontn.com&utm_medium=app&utm_campaign=HiLiKaShing`;
     console.log(parknshopUrl);
@@ -160,12 +160,12 @@ export default class MallItemCell extends Component {
   }
 }
 
-MallItemCell.propTypes = {
+ParknshopMallItemCell.propTypes = {
   item: React.PropTypes.object,
   rowID: React.PropTypes.string,
 };
 
-MallItemCell.defaultProps = {
+ParknshopMallItemCell.defaultProps = {
   item: {},
   rowID: '0',
 };
