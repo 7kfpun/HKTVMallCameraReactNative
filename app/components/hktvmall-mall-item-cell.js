@@ -154,12 +154,12 @@ export default class HktvmallMallItemCell extends Component {
                     <Text style={styles.optionText}>{strings.share}</Text>
                   </View>
                 </TouchableHighlight>
-                <TouchableHighlight onPress={() => this.onSave(this.props.item)} underlayColor="white">
+                {/* <TouchableHighlight onPress={() => this.onSave(this.props.item)} underlayColor="white">
                   <View style={styles.option}>
                     <Icon name="bookmark-border" size={20} color="#757575" />
                     <Text style={styles.optionText}>{strings.save}</Text>
                   </View>
-                </TouchableHighlight>
+                </TouchableHighlight> */}
               </View>
             </View>
           </View>

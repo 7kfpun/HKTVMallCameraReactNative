@@ -80,25 +80,9 @@ export default class CameraView extends Component {
         // response is one of: 'authorized', 'denied', 'restricted', or 'undetermined'
         console.log('Permission status', response);
         if (response.camera !== 'authorized' && response.camera !== 'undetermined') {
-          this.setState({ permission: 'DENIED' });
-          Alert.alert(
-            'Can we access your camera?',
-            'We need access so you can use the function.',
-            [
-              { text: 'No way', onPress: () => console.log('permission denied'), style: 'cancel' },
-              { text: 'Open Settings', onPress: Permissions.openSettings },
-            ]
-          );
+          this.setState({ permission: 'CAMERA-DENIED' });
         } else if (response.photo !== 'authorized' && response.photo !== 'undetermined') {
-          this.setState({ permission: 'DENIED' });
-          Alert.alert(
-            'Can we access your photos?',
-            'We need access so you can use the function.',
-            [
-              { text: 'No way', onPress: () => console.log('permission denied'), style: 'cancel' },
-              { text: 'Open Settings', onPress: Permissions.openSettings },
-            ]
-          );
+          this.setState({ permission: 'PHOTO-DENIED' });
         } else {
           this.setState({ permission: 'ALLOWED' });
         }
@@ -123,6 +107,57 @@ export default class CameraView extends Component {
     });
   }
 
+  askPermission(permission) {
+    Permissions.checkMultiplePermissions([permission])
+      .then(response => {
+        // response is one of: 'authorized', 'denied', 'restricted', or 'undetermined'
+        console.log('Permission status', response);
+        if (response.camera !== 'authorized' && response.camera !== 'undetermined') {
+          this.setState({ permission: 'CAMERA-DENIED' });
+          Alert.alert(
+            strings.ask_camera_permission,
+            strings.ask_permission_description,
+            [
+              { text: strings.no_way, onPress: () => console.log('permission denied'), style: 'cancel' },
+              { text: strings.open_settings, onPress: Permissions.openSettings },
+            ]
+          );
+        } else if (response.photo !== 'authorized' && response.photo !== 'undetermined') {
+          this.setState({ permission: 'PHOTO-DENIED' });
+          Alert.alert(
+            strings.ask_camera_permission,
+            strings.ask_permission_description,
+            [
+              { text: strings.no_way, onPress: () => console.log('permission denied'), style: 'cancel' },
+              { text: strings.open_settings, onPress: Permissions.openSettings },
+            ]
+          );
+        } else {
+          this.setState({ permission: 'ALLOWED' });
+        }
+      });
+  }
+
+  askLocation(data) {
+    Alert.alert(
+      strings.select_location,
+      '',
+      [
+        { text: strings.hong_kong, onPress: () => {
+          store.save('Country', 'HK');
+          Actions.result({ data });
+          GoogleAnalytics.trackEvent('user-action', 'take-picture');
+        } },
+        { text: strings.taiwan, onPress: () => {
+          store.save('Country', 'TW');
+          Actions.result({ data });
+          GoogleAnalytics.trackEvent('user-action', 'take-picture');
+        } },
+        { text: strings.cancel, style: 'cancel' },
+      ]
+    );
+  }
+
   takePicture() {
     this.camera.capture().then((data) => {
       console.log(data);
@@ -132,23 +167,7 @@ export default class CameraView extends Component {
             Actions.result({ data });
             GoogleAnalytics.trackEvent('user-action', 'take-picture');
           } else {
-            Alert.alert(
-              'Select your location',
-              '',
-              [
-                { text: 'Hong Kong', onPress: () => {
-                  store.save('Country', 'HK');
-                  Actions.result({ data });
-                  GoogleAnalytics.trackEvent('user-action', 'take-picture');
-                } },
-                { text: 'Taiwan', onPress: () => {
-                  store.save('Country', 'TW');
-                  Actions.result({ data });
-                  GoogleAnalytics.trackEvent('user-action', 'take-picture');
-                } },
-                { text: 'Cancel', style: 'cancel' },
-              ]
-            );
+            this.askLocation(data);
           }
         });
       }
@@ -165,23 +184,7 @@ export default class CameraView extends Component {
             Actions.result({ data: { path: response } });
             GoogleAnalytics.trackEvent('user-action', 'pick-image');
           } else {
-            Alert.alert(
-              'Select your location',
-              '',
-              [
-                { text: 'Hong Kong', onPress: () => {
-                  store.save('Country', 'HK');
-                  Actions.result({ data: { path: response } });
-                  GoogleAnalytics.trackEvent('user-action', 'pick-image');
-                } },
-                { text: 'Taiwan', onPress: () => {
-                  store.save('Country', 'TW');
-                  Actions.result({ data: { path: response } });
-                  GoogleAnalytics.trackEvent('user-action', 'pick-image');
-                } },
-                { text: 'Cancel', style: 'cancel' },
-              ]
-            );
+            this.askLocation({ data: { path: response } });
           }
         });
       }
@@ -192,7 +195,27 @@ export default class CameraView extends Component {
     GoogleAnalytics.trackScreenView('Camera');
     return (
       <View style={styles.container}>
-        {this.state.permission !== 'DENIED' && <Camera
+        {this.state.permission === 'CAMERA-DENIED' && <View style={styles.preview}>
+          <View style={styles.cameraIcons}>
+            <TouchableHighlight onPress={() => this.pickImage()} underlayColor="black">
+              <View style={styles.library}>
+                <Icon name="photo-library" size={26} color="white" />
+                <Text style={styles.text}>{strings.library}</Text>
+              </View>
+            </TouchableHighlight>
+
+            <Icon name="photo-camera" style={styles.capture} size={52} color="white" onPress={() => this.askPermission('camera')} />
+
+            <TouchableHighlight onPress={() => Actions.more()} underlayColor="black">
+              <View style={styles.moreButton}>
+                <Icon name="format-list-bulleted" size={26} color="white" />
+                <Text style={styles.text}>{strings.more}</Text>
+              </View>
+            </TouchableHighlight>
+          </View>
+        </View>}
+
+        {this.state.permission !== 'CAMERA-DENIED' && <Camera
           ref={(cam) => {
             this.camera = cam;
           }}

@@ -27,7 +27,7 @@ const strings = locale.zh_Hant;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#EFEFF4',
   },
   navigatorBarIOS: {
     backgroundColor: '#455A64',
@@ -164,7 +164,7 @@ export default class MoreView extends Component {
         {this.renderToolbar()}
         <ScrollView>
           <TableView>
-            <Section header={strings.saved.toUpperCase()}>
+            {/* <Section header={strings.saved.toUpperCase()}>
               {this.state.hasSaved && <ListView
                 key={this.state.key}
                 dataSource={this.state.dataSource}
@@ -188,7 +188,7 @@ export default class MoreView extends Component {
               />}
             </Section>
 
-            {/* <Section>
+            <Section>
               <Cell
                 cellStyle="RightDetail"
                 title="Clear all"
