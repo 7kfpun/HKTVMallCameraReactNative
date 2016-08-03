@@ -18,8 +18,13 @@ import ParknshopMallItemCell from './parknshop-mall-item-cell';
 import PchomeMallItemCell from './pchome-mall-item-cell';
 import BooksMallItemCell from './books-mall-item-cell';
 
+import GoogleMallItemCell from './google-mall-item-cell';
+
 import { locale } from './../locale';
 const strings = locale.zh_Hant;
+
+import { config } from './../config';
+const googleSearch = config.googleSearch;
 
 const styles = StyleSheet.create({
   container: {
@@ -63,6 +68,8 @@ export default class MallCell extends Component {
       this.searchPchome();
     } else if (this.props.shop === 'BOOKS') {
       this.searchBooks();
+    } else if (this.props.shop === 'GOOGLESEARCH') {
+      this.searchGoogleSearch();
     } else {
       this.searchHktvMall();
     }
@@ -223,6 +230,44 @@ export default class MallCell extends Component {
     });
   }
 
+  searchGoogleSearch() {
+    const query = encodeURIComponent(this.props.query);
+    const resultsForPage = 10;
+    const url = `https://www.googleapis.com/customsearch/v1?q=${query}&cx=${googleSearch.HK}&key=${googleSearch.key}&lr=lang_zh-TW&num=${resultsForPage}`;
+    console.log('encodeURIComponent', url);
+    const that = this;
+    fetch(url, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    })
+    .then((response) => response.json())
+    .then((json) => {
+      console.log(json);
+      if (json.items && json.items.length > 0) {
+        that.setState(Object.assign({}, json, {
+          dataSource: that.state.dataSource.cloneWithRows(json.items),
+          key: Math.random(),
+          hasResult: true,
+        }));
+
+        try {
+          if (that.props.filename) {
+            firebase.database().ref(`app/googlesearch/${that.props.filename}`.replace('.jpg', '')).set(json.items);
+          }
+        } catch (err) {
+          console.warn(err);
+        }
+      } else {
+        that.setState({ hasResult: false });
+      }
+
+      that.setState({ loading: false });
+    })
+    .catch((error) => {
+      console.warn(error);
+    });
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -244,6 +289,8 @@ export default class MallCell extends Component {
               return <PchomeMallItemCell item={rowData} rowID={rowID} />;
             } else if (this.props.shop === 'BOOKS') {
               return <BooksMallItemCell item={rowData} rowID={rowID} />;
+            } else if (this.props.shop === 'GOOGLESEARCH') {
+              return <GoogleMallItemCell item={rowData} rowID={rowID} />;
             }
 
             return <HktvmallMallItemCell item={rowData} rowID={rowID} />;

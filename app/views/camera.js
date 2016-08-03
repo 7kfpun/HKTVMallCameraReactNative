@@ -226,7 +226,7 @@ export default class CameraView extends Component {
           onBarCodeRead={data => this.onBarCodeRead(data)}
         >
           <View style={styles.cameraIcons}>
-            <TouchableHighlight onPress={() => this.pickImage()} underlayColor="black">
+            <TouchableHighlight onPress={() => this.pickImage()} underlayColor="transparent">
               <View style={styles.library}>
                 <Icon name="photo-library" size={26} color="white" />
                 <Text style={styles.text}>{strings.library}</Text>
@@ -235,7 +235,7 @@ export default class CameraView extends Component {
 
             <Icon name="photo-camera" style={styles.capture} size={52} color="white" onPress={() => this.takePicture()} />
 
-            <TouchableHighlight onPress={() => Actions.timeline()} underlayColor="black">
+            <TouchableHighlight onPress={() => Actions.timeline()} underlayColor="transparent">
               <View style={styles.moreButton}>
                 <Icon name="format-list-bulleted" size={26} color="white" />
                 <Text style={[styles.text, { fontSize: 12 }]}>{strings.timeline}</Text>

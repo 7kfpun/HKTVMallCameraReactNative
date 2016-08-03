@@ -85,10 +85,17 @@ export default class TimelineView extends Component {
           images = images.filter((item) => !item.isDeleted);
           images = _.sortBy(images, 'timestamp');
           console.log(images);
-          that.setState({
-            dataSource: this.state.dataSource.cloneWithRows(images),
-            hasResult: true,
-          });
+          if (images.length > 0) {
+            images.reverse();
+            that.setState({
+              dataSource: this.state.dataSource.cloneWithRows(images),
+              hasResult: true,
+            });
+          } else {
+            that.setState({
+              hasResult: false,
+            });
+          }
         } else {
           that.setState({
             hasResult: false,
@@ -144,7 +151,7 @@ export default class TimelineView extends Component {
         {!this.state.loading && !this.state.hasResult && <View style={styles.noResults}>
           <Text>{strings.no_results}</Text>
         </View>}
-        {!this.state.loading && <ListView
+        {!this.state.loading && this.state.hasResult && <ListView
           key={this.state.key}
           dataSource={this.state.dataSource}
           renderRow={(rowData) => <TimelineCell image={rowData} />}

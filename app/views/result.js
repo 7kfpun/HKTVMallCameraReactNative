@@ -33,7 +33,6 @@ import store from 'react-native-simple-store';
 import MallCell from './../components/mall-cell';
 
 import { config } from './../config';
-
 const gcloudStorage = config.gcloudStorage;
 const gcloudVision = config.gcloudVision;
 
@@ -92,7 +91,7 @@ const styles = StyleSheet.create({
   shopIcon: {
     flex: 1,
     flexDirection: 'row',
-    paddingHorizontal: 6,
+    paddingHorizontal: 3,
     alignItems: 'center',
   },
   selectedShopIcon: {
@@ -127,6 +126,8 @@ export default class ResultView extends Component {
 
     this.state = {
       isCollapsed: false,
+      country: 'HK',
+      shop: 'HKTVMALL',
     };
   }
 
@@ -384,6 +385,15 @@ export default class ResultView extends Component {
                   source={require('./../../assets/parknshop.png')}  // eslint-disable-line global-require
                 />
                 <Text style={styles.shopText}>ParknShop</Text>
+              </View>
+            </TouchableHighlight>}
+            {this.state.country === 'HK' && <TouchableHighlight onPress={() => this.setState({ shop: 'GOOGLESEARCH', key: Math.random() })} underlayColor="#E0E0E0">
+              <View style={[styles.shopIcon, this.state.shop === 'GOOGLESEARCH' ? styles.selectedShopIcon : null]}>
+                <Image
+                  style={styles.shopImage}
+                  source={require('./../../assets/googlesearch.png')}  // eslint-disable-line global-require
+                />
+                <Text style={styles.shopText}>Google</Text>
               </View>
             </TouchableHighlight>}
             {this.state.country === 'TW' && <TouchableHighlight onPress={() => this.setState({ shop: 'PCHOME', key: Math.random() })} underlayColor="#E0E0E0">
