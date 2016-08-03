@@ -145,7 +145,7 @@ export default class ResultView extends Component {
     console.log('componentDidMount', this.props.data);
 
     const that = this;
-    ImageResizer.createResizedImage(this.props.data.path, 500, 500, 'JPEG', 40).then((resizedImageUri) => {
+    ImageResizer.createResizedImage(this.props.data.path, 600, 600, 'JPEG', 40).then((resizedImageUri) => {
       console.log('resizedImageUri', resizedImageUri);
       const filename = resizedImageUri.replace(/^.*[\\\/]/, '');
       that.setState({ filename });
@@ -204,8 +204,9 @@ export default class ResultView extends Component {
             that.getQuery();
 
             try {
-              firebase.database().ref(`app/timestamp/${filename}`.replace('.jpg', '')).set(new Date().getTime());
-              firebase.database().ref(`app/uniqueID/${filename}`.replace('.jpg', '')).set(uniqueID);
+              firebase.database().ref(`app/img/${filename}/timestamp`.replace('.jpg', '')).set(new Date().getTime());
+              firebase.database().ref(`app/img/${filename}/uniqueID`.replace('.jpg', '')).set(uniqueID);
+
               firebase.database().ref(`app/bucket/${filename}`.replace('.jpg', '')).set(json);
               firebase.database().ref(`app/vision/${filename}`.replace('.jpg', '')).set(jjson.responses[0]);
             } catch (err) {
@@ -264,7 +265,7 @@ export default class ResultView extends Component {
         buttons.push(
           <Button
             key={index}
-            style={[styles.buttonStyle]}
+            style={styles.buttonStyle}
             textStyle={styles.buttonText}
             onPress={() => this.setState({ query: logoAnnotations[index].description, key: Math.random() })}
           >
@@ -278,7 +279,7 @@ export default class ResultView extends Component {
         buttons.push(
           <Button
             key={MIN_TAGS + index}
-            style={[styles.buttonStyle]}
+            style={styles.buttonStyle}
             textStyle={styles.buttonText}
             onPress={() => this.setState({ query: labelAnnotations[index].description, key: Math.random() })}
           >
@@ -293,7 +294,7 @@ export default class ResultView extends Component {
         buttons.push(
           <Button
             key={MIN_TAGS * 2 + index}
-            style={[styles.buttonStyle]}
+            style={styles.buttonStyle}
             textStyle={styles.buttonText}
             onPress={() => this.setState({ query: texts[index], key: Math.random() })}
           >

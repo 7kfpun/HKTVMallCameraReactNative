@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
 import {
   Alert,
-  Image,
   Linking,
   ListView,
   ScrollView,
   StyleSheet,
-  Text,
   View,
-  TouchableHighlight,
 } from 'react-native';
 
 // 3rd party libraries
@@ -231,7 +228,7 @@ export default class MoreView extends Component {
                 cellStyle="RightDetail"
                 title={strings.disclaimer}
                 onPress={() => Alert.alert(
-                  strings.disclaimer,
+                  strings.disclaimer_details,
                   '',
                   [
                     { text: 'OK', onPress: () => console.log('OK Pressed') },

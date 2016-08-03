@@ -4,10 +4,11 @@ import {
 } from 'react-native';
 
 // Views
-import Camera from './app/views/camera';
-import Result from './app/views/result';
-import BarcodeResult from './app/views/barcode-result';
-import More from './app/views/more';
+import CameraView from './app/views/camera';
+import ResultView from './app/views/result';
+import BarcodeResultView from './app/views/barcode-result';
+import MoreView from './app/views/more';
+import TimelineView from './app/views/timeline';
 
 import firebase from 'firebase';
 
@@ -31,10 +32,11 @@ if (DeviceInfo.getDeviceName() === 'iPhone Simulator') {
 
 const scenes = Actions.create(
   <Scene key="root">
-    <Scene key="camera" title="Camera" component={Camera} hideNavBar={true} initial={true} />
-    <Scene key="result" title="Result" component={Result} hideNavBar={true} />
-    <Scene key="barcodeResult" title="Result" component={BarcodeResult} hideNavBar={true} />
-    <Scene key="more" title={strings.more} component={More} hideNavBar={true} />
+    <Scene key="camera" title="Camera" component={CameraView} hideNavBar={true} initial={true} />
+    <Scene key="result" title="Result" component={ResultView} hideNavBar={true} />
+    <Scene key="barcodeResult" title="Result" component={BarcodeResultView} hideNavBar={true} />
+    <Scene key="more" title={strings.more} component={MoreView} hideNavBar={true} />
+    <Scene key="timeline" title={strings.timeline} component={TimelineView} hideNavBar={true} />
   </Scene>
 );
 

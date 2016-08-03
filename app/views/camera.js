@@ -206,10 +206,10 @@ export default class CameraView extends Component {
 
             <Icon name="photo-camera" style={styles.capture} size={52} color="white" onPress={() => this.askPermission('camera')} />
 
-            <TouchableHighlight onPress={() => Actions.more()} underlayColor="black">
+            <TouchableHighlight onPress={() => Actions.timeline()} underlayColor="black">
               <View style={styles.moreButton}>
                 <Icon name="format-list-bulleted" size={26} color="white" />
-                <Text style={styles.text}>{strings.more}</Text>
+                <Text style={styles.text}>{strings.timeline}</Text>
               </View>
             </TouchableHighlight>
           </View>
@@ -235,10 +235,10 @@ export default class CameraView extends Component {
 
             <Icon name="photo-camera" style={styles.capture} size={52} color="white" onPress={() => this.takePicture()} />
 
-            <TouchableHighlight onPress={() => Actions.more()} underlayColor="black">
+            <TouchableHighlight onPress={() => Actions.timeline()} underlayColor="black">
               <View style={styles.moreButton}>
                 <Icon name="format-list-bulleted" size={26} color="white" />
-                <Text style={styles.text}>{strings.more}</Text>
+                <Text style={[styles.text, { fontSize: 12 }]}>{strings.timeline}</Text>
               </View>
             </TouchableHighlight>
           </View>
