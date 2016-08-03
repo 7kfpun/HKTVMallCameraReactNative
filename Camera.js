@@ -35,7 +35,7 @@ const scenes = Actions.create(
     <Scene key="camera" title="Camera" component={CameraView} hideNavBar={true} initial={true} />
     <Scene key="result" title="Result" component={ResultView} hideNavBar={true} />
     <Scene key="barcodeResult" title="Result" component={BarcodeResultView} hideNavBar={true} />
-    <Scene key="more" title={strings.more} component={MoreView} hideNavBar={true} />
+    <Scene key="more" title={strings.settings} component={MoreView} hideNavBar={true} />
     <Scene key="timeline" title={strings.timeline} component={TimelineView} hideNavBar={true} />
   </Scene>
 );

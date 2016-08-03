@@ -10,18 +10,10 @@ import {
 import firebase from 'firebase';
 
 // 3rd party libraries
+import { Actions } from 'react-native-router-flux';
 import Button from 'apsl-react-native-button';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import store from 'react-native-simple-store';
-
-// Elements
-// import HktvmallMallItemCell from './hktvmall-mall-item-cell';
-// import ParknshopMallItemCell from './parknshop-mall-item-cell';
-// import PchomeMallItemCell from './pchome-mall-item-cell';
-// import BooksMallItemCell from './books-mall-item-cell';
-
-// Components
-import MallCell from './../components/mall-cell';
 
 const styles = StyleSheet.create({
   container: {
@@ -33,8 +25,8 @@ const styles = StyleSheet.create({
   },
   delete: {
     position: 'absolute',
-    right: 5,
-    top: 5,
+    right: 8,
+    top: 8,
   },
   image: {
     width: Dimensions.get('window').width - 20,
@@ -93,7 +85,7 @@ export default class TimelineCell extends Component {
         const value = snapshot.val();
         // console.log(Object.keys(value), value);
         that.setState({
-          mediaLink: value.mediaLink,
+          vision: value,
           loading: false,
         });
       }
@@ -173,6 +165,13 @@ export default class TimelineCell extends Component {
     return buttons;
   }
 
+  getResult() {
+    Actions.result({
+      fromTimeline: true,
+      data: Object.assign({ path: this.state.vision.mediaLink }, this.state.vision),
+    });
+  }
+
   delete(image) {
     firebase.database().ref(`app/img/${image}/isDeleted`).set(true);
     this.setState({ isDeleted: true });
@@ -182,11 +181,11 @@ export default class TimelineCell extends Component {
     if (!this.state.isDeleted) {
       return (
         <View style={styles.container}>
-          <TouchableHighlight onPress={() => console.log()} underlayColor="white">
+          <TouchableHighlight onPress={() => this.getResult()} underlayColor="white">
             <View>
               <Image
                 style={styles.image}
-                source={{ uri: this.state.mediaLink }}
+                source={{ uri: this.state.vision && this.state.vision.mediaLink }}
               />
               <View style={styles.tagsBar}>
                 {this.getTags()}

@@ -20,6 +20,9 @@ import Spinner from 'react-native-spinkit';
 // Components
 import TimelineCell from './../components/timeline-cell';
 
+import { locale } from './../locale';
+const strings = locale.zh_Hant;
+
 const uniqueID = DeviceInfo.getUniqueID();
 
 const styles = StyleSheet.create({
@@ -139,7 +142,7 @@ export default class TimelineView extends Component {
           <Spinner style={styles.spinner} isVisible={this.state.isVisible} size={40} type={'Pulse'} color={'#424242'} />
         </View>}
         {!this.state.loading && !this.state.hasResult && <View style={styles.noResults}>
-          <Text>No results</Text>
+          <Text>{strings.no_results}</Text>
         </View>}
         {!this.state.loading && <ListView
           key={this.state.key}

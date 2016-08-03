@@ -142,88 +142,11 @@ export default class ResultView extends Component {
       }
     });
 
-    console.log('componentDidMount', this.props.data);
-
-    const that = this;
-    ImageResizer.createResizedImage(this.props.data.path, 600, 600, 'JPEG', 40).then((resizedImageUri) => {
-      console.log('resizedImageUri', resizedImageUri);
-      const filename = resizedImageUri.replace(/^.*[\\\/]/, '');
-      that.setState({ filename });
-      RNFetchBlob.fetch(
-        'POST',
-        `https://www.googleapis.com/upload/storage/v1/b/${gcloudStorage}/o?uploadType=media&name=${filename}`,
-        {
-          'Content-Type': 'image/jpeg',
-        },
-        RNFetchBlob.wrap(resizedImageUri)
-      )
-      .then((response) => response.json())
-      .then((json) => {
-        console.log('Google bucket', json);
-        const name = json.name;
-        fetch(`https://vision.googleapis.com/v1/images:annotate?key=${gcloudVision}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            requests: [
-              {
-                image: {
-                  source: {
-                    gcs_image_uri: `gs://${gcloudStorage}/${name}`,
-                  },
-                },
-                features: [
-                  {
-                    type: 'LABEL_DETECTION',
-                    maxResults: 10,
-                  },
-                  {
-                    type: 'LOGO_DETECTION',
-                    maxResults: 5,
-                  },
-                  {
-                    type: 'TEXT_DETECTION',
-                    maxResults: 15,
-                  },
-                ],
-              },
-            ],
-          }),
-        })
-        .then((response) => response.json())
-        .then((jjson) => {
-          console.log('Google vision', jjson);
-          that.setState({ vision: jjson });
-
-          if (jjson.responses && jjson.responses.length) {
-            that.setState(jjson.responses[0]);
-            console.log('labelAnnotations', that.state.labelAnnotations);
-            console.log('logoAnnotations', that.state.logoAnnotations);
-            console.log('textAnnotations', that.state.textAnnotations);
-
-            that.getQuery();
-
-            try {
-              firebase.database().ref(`app/img/${filename}/timestamp`.replace('.jpg', '')).set(new Date().getTime());
-              firebase.database().ref(`app/img/${filename}/uniqueID`.replace('.jpg', '')).set(uniqueID);
-
-              firebase.database().ref(`app/bucket/${filename}`.replace('.jpg', '')).set(json);
-              firebase.database().ref(`app/vision/${filename}`.replace('.jpg', '')).set(jjson.responses[0]);
-            } catch (err) {
-              console.warn(err);
-            }
-          }
-        })
-        .catch((error) => {
-          console.warn(error);
-        });
-      })
-      .catch((error) => {
-        console.warn(error);
-      });
-    }).catch((err) => {
-      console.log('ImageResizer', err);
-    });
+    if (this.props.fromTimeline) {
+      this.requiestVision(this.props.data.name);
+    } else {
+      this.uploadImage();
+    }
   }
 
   onShareDeveloper() {
@@ -259,7 +182,7 @@ export default class ResultView extends Component {
     const buttons = [];
     const { logoAnnotations, textAnnotations, labelAnnotations } = this.state;
 
-    const MIN_TAGS = 5;
+    const MIN_TAGS = 8;
     if (logoAnnotations) {
       for (let index = 0; index < Math.min(MIN_TAGS, logoAnnotations.length); index++) {
         buttons.push(
@@ -304,6 +227,100 @@ export default class ResultView extends Component {
       }
     }
     return buttons;
+  }
+
+  requiestVision(filename) {
+    const that = this;
+    fetch(`https://vision.googleapis.com/v1/images:annotate?key=${gcloudVision}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        requests: [
+          {
+            image: {
+              source: {
+                gcs_image_uri: `gs://${gcloudStorage}/${filename}`,
+              },
+            },
+            features: [
+              {
+                type: 'LABEL_DETECTION',
+                maxResults: 10,
+              },
+              {
+                type: 'LOGO_DETECTION',
+                maxResults: 5,
+              },
+              {
+                type: 'TEXT_DETECTION',
+                maxResults: 15,
+              },
+            ],
+          },
+        ],
+      }),
+    })
+    .then((response) => response.json())
+    .then((json) => {
+      console.log('Google vision', json);
+      that.setState({ vision: json });
+
+      if (json.responses && json.responses.length) {
+        that.setState(json.responses[0]);
+        console.log('labelAnnotations', that.state.labelAnnotations);
+        console.log('logoAnnotations', that.state.logoAnnotations);
+        console.log('textAnnotations', that.state.textAnnotations);
+
+        that.getQuery();
+
+        try {
+          firebase.database().ref(`app/vision/${filename}`.replace('.jpg', '')).set(json.responses[0]);
+        } catch (err) {
+          console.warn(err);
+        }
+      }
+    })
+    .catch((error) => {
+      console.warn(error);
+    });
+  }
+
+  uploadImage() {
+    console.log('componentDidMount', this.props.data);
+
+    const that = this;
+    ImageResizer.createResizedImage(this.props.data.path, 600, 600, 'JPEG', 40).then((resizedImageUri) => {
+      console.log('resizedImageUri', resizedImageUri);
+      const filename = resizedImageUri.replace(/^.*[\\\/]/, '');
+      that.setState({ filename });
+      RNFetchBlob.fetch(
+        'POST',
+        `https://www.googleapis.com/upload/storage/v1/b/${gcloudStorage}/o?uploadType=media&name=${filename}`,
+        {
+          'Content-Type': 'image/jpeg',
+        },
+        RNFetchBlob.wrap(resizedImageUri)
+      )
+      .then((response) => response.json())
+      .then((json) => {
+        console.log('Google bucket', json);
+        that.requiestVision(filename);
+
+        try {
+          firebase.database().ref(`app/img/${filename}/timestamp`.replace('.jpg', '')).set(new Date().getTime());
+          firebase.database().ref(`app/img/${filename}/uniqueID`.replace('.jpg', '')).set(uniqueID);
+
+          firebase.database().ref(`app/bucket/${filename}`.replace('.jpg', '')).set(json);
+        } catch (err) {
+          console.warn(err);
+        }
+      })
+      .catch((error) => {
+        console.warn(error);
+      });
+    }).catch((err) => {
+      console.warn('ImageResizer', err);
+    });
   }
 
   render() {
@@ -421,8 +438,10 @@ export default class ResultView extends Component {
 
 ResultView.propTypes = {
   data: React.PropTypes.object,
+  fromTimeline: React.PropTypes.bool,
 };
 
 ResultView.defaultProps = {
   data: {},
+  fromTimeline: false,
 };

@@ -18,6 +18,9 @@ import ParknshopMallItemCell from './parknshop-mall-item-cell';
 import PchomeMallItemCell from './pchome-mall-item-cell';
 import BooksMallItemCell from './books-mall-item-cell';
 
+import { locale } from './../locale';
+const strings = locale.zh_Hant;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -227,7 +230,7 @@ export default class MallCell extends Component {
           <Spinner isVisible={this.state.isVisible} size={40} type={'Pulse'} color={'#424242'} />
         </View>}
         {!this.state.loading && !this.state.hasResult && <View style={styles.noResults}>
-          <Text>No results</Text>
+          <Text>{strings.no_results}</Text>
         </View>}
         {!this.state.loading && this.state.hasResult && <ListView
           key={this.state.key}
