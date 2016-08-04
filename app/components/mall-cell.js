@@ -69,7 +69,7 @@ export default class MallCell extends Component {
     } else if (this.props.shop === 'BOOKS') {
       this.searchBooks();
     } else if (this.props.shop === 'GOOGLESEARCH') {
-      this.searchGoogleSearch();
+      this.searchGoogleSearch(this.props.country);
     } else {
       this.searchHktvMall();
     }
@@ -230,10 +230,10 @@ export default class MallCell extends Component {
     });
   }
 
-  searchGoogleSearch() {
+  searchGoogleSearch(country) {
     const query = encodeURIComponent(this.props.query);
     const resultsForPage = 10;
-    const url = `https://www.googleapis.com/customsearch/v1?q=${query}&cx=${googleSearch.HK}&key=${googleSearch.key}&lr=lang_zh-TW&num=${resultsForPage}`;
+    const url = `https://www.googleapis.com/customsearch/v1?q=${query}&cx=${googleSearch[country]}&key=${googleSearch.key}&lr=lang_zh-TW&num=${resultsForPage}`;
     console.log('encodeURIComponent', url);
     const that = this;
     fetch(url, {
@@ -306,9 +306,11 @@ MallCell.propTypes = {
   shop: React.PropTypes.string,
   query: React.PropTypes.string,
   filename: React.PropTypes.string,
+  country: React.PropTypes.string,
 };
 
 MallCell.defaultProps = {
   elements: ['tag'],
   shop: 'hktv',
+  country: 'HK',
 };

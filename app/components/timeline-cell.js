@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+  Alert,
   Dimensions,
   Image,
   StyleSheet,
@@ -14,6 +15,9 @@ import { Actions } from 'react-native-router-flux';
 import Button from 'apsl-react-native-button';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import store from 'react-native-simple-store';
+
+import { locale } from './../locale';
+const strings = locale.zh_Hant;
 
 const styles = StyleSheet.create({
   container: {
@@ -62,17 +66,6 @@ export default class TimelineCell extends Component {
   }
 
   componentDidMount() {
-    store.get('Country').then(Country => {
-      if (Country) {
-        this.setState({ country: Country });
-        if (Country === 'HK') {
-          this.setState({ shop: 'HKTVMALL' });
-        } else if (Country === 'TW') {
-          this.setState({ shop: 'PCHOME' });
-        }
-      }
-    });
-
     this.getFirebaseBucket();
     this.getFirebaseVision();
   }
@@ -166,9 +159,38 @@ export default class TimelineCell extends Component {
   }
 
   getResult() {
-    Actions.result({
-      fromTimeline: true,
-      data: Object.assign({ path: this.state.vision.mediaLink }, this.state.vision),
+    store.get('Country').then(Country => {
+      if (Country) {
+        Actions.result({
+          fromTimeline: true,
+          data: Object.assign({ path: this.state.vision.mediaLink }, this.state.vision),
+          country: Country,
+        });
+      } else {
+        Alert.alert(
+          strings.select_location,
+          '',
+          [
+            { text: strings.hong_kong, onPress: () => {
+              store.save('Country', 'HK');
+              Actions.result({
+                fromTimeline: true,
+                data: Object.assign({ path: this.state.vision.mediaLink }, this.state.vision),
+                country: 'HK',
+              });
+            } },
+            { text: strings.taiwan, onPress: () => {
+              store.save('Country', 'TW');
+              Actions.result({
+                fromTimeline: true,
+                data: Object.assign({ path: this.state.vision.mediaLink }, this.state.vision),
+                country: 'TW',
+              });
+            } },
+            { text: strings.cancel, style: 'cancel' },
+          ]
+        );
+      }
     });
   }
 

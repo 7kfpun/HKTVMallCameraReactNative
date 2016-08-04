@@ -145,13 +145,11 @@ export default class CameraView extends Component {
       [
         { text: strings.hong_kong, onPress: () => {
           store.save('Country', 'HK');
-          Actions.result({ data });
-          GoogleAnalytics.trackEvent('user-action', 'take-picture');
+          Actions.result({ data, country: 'HK' });
         } },
         { text: strings.taiwan, onPress: () => {
           store.save('Country', 'TW');
-          Actions.result({ data });
-          GoogleAnalytics.trackEvent('user-action', 'take-picture');
+          Actions.result({ data, country: 'TW' });
         } },
         { text: strings.cancel, style: 'cancel' },
       ]
@@ -159,15 +157,16 @@ export default class CameraView extends Component {
   }
 
   takePicture() {
+    const that = this;
     this.camera.capture().then((data) => {
+      GoogleAnalytics.trackEvent('user-action', 'take-picture');
       console.log(data);
       if (data) {
         store.get('Country').then(Country => {
           if (Country) {
-            Actions.result({ data });
-            GoogleAnalytics.trackEvent('user-action', 'take-picture');
+            Actions.result({ data, country: Country });
           } else {
-            this.askLocation(data);
+            that.askLocation(data);
           }
         });
       }
@@ -176,15 +175,16 @@ export default class CameraView extends Component {
   }
 
   pickImage() {
+    const that = this;
     ImagePickerIOS.openSelectDialog({}, (response) => {
+      GoogleAnalytics.trackEvent('user-action', 'pick-image');
       console.log(response);
       if (response) {
         store.get('Country').then(Country => {
           if (Country) {
-            Actions.result({ data: { path: response } });
-            GoogleAnalytics.trackEvent('user-action', 'pick-image');
+            Actions.result({ data: { path: response }, country: Country });
           } else {
-            this.askLocation({ data: { path: response } });
+            that.askLocation({ path: response });
           }
         });
       }

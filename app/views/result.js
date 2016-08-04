@@ -24,7 +24,6 @@ import ImageResizer from 'react-native-image-resizer'; // eslint-disable-line im
 import RNFetchBlob from 'react-native-fetch-blob';
 import Share from 'react-native-share';
 import Spinner from 'react-native-spinkit';
-import store from 'react-native-simple-store';
 
 // Components
 // import LabelsCell from './../components/labels-cell';
@@ -73,11 +72,11 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#616161',
-    fontSize: 12,
+    fontSize: 14,
   },
   buttonStyle: {
     borderRadius: 0,
-    height: 20,
+    height: 22,
     marginRight: 4,
     paddingHorizontal: 4,
     backgroundColor: '#F5F5F5',
@@ -127,22 +126,11 @@ export default class ResultView extends Component {
     this.state = {
       isCollapsed: false,
       country: 'HK',
-      shop: 'HKTVMALL',
+      shop: this.props.country === 'HK' ? 'HKTVMALL' : 'PCHOME',
     };
   }
 
   componentDidMount() {
-    store.get('Country').then(Country => {
-      if (Country) {
-        this.setState({ country: Country });
-        if (Country === 'HK') {
-          this.setState({ shop: 'HKTVMALL' });
-        } else if (Country === 'TW') {
-          this.setState({ shop: 'PCHOME' });
-        }
-      }
-    });
-
     if (this.props.fromTimeline) {
       this.requiestVision(this.props.data.name);
     } else {
@@ -369,7 +357,7 @@ export default class ResultView extends Component {
             />
           </Egg>
           <View style={styles.shopBlock}>
-            {this.state.country === 'HK' && <TouchableHighlight onPress={() => this.setState({ shop: 'HKTVMALL', key: Math.random() })} underlayColor="#E0E0E0">
+            {this.props.country === 'HK' && <TouchableHighlight onPress={() => this.setState({ shop: 'HKTVMALL', key: Math.random() })} underlayColor="#E0E0E0">
               <View style={[styles.shopIcon, this.state.shop === 'HKTVMALL' ? styles.selectedShopIcon : null]}>
                 <Image
                   style={styles.shopImage}
@@ -378,7 +366,7 @@ export default class ResultView extends Component {
                 <Text style={styles.shopText}>HKTVmall</Text>
               </View>
             </TouchableHighlight>}
-            {this.state.country === 'HK' && <TouchableHighlight onPress={() => this.setState({ shop: 'PARKNSHOP', key: Math.random() })} underlayColor="#E0E0E0">
+            {this.props.country === 'HK' && <TouchableHighlight onPress={() => this.setState({ shop: 'PARKNSHOP', key: Math.random() })} underlayColor="#E0E0E0">
               <View style={[styles.shopIcon, this.state.shop === 'PARKNSHOP' ? styles.selectedShopIcon : null]}>
                 <Image
                   style={styles.shopImage}
@@ -387,7 +375,7 @@ export default class ResultView extends Component {
                 <Text style={styles.shopText}>ParknShop</Text>
               </View>
             </TouchableHighlight>}
-            {this.state.country === 'HK' && <TouchableHighlight onPress={() => this.setState({ shop: 'GOOGLESEARCH', key: Math.random() })} underlayColor="#E0E0E0">
+            {this.props.country === 'HK' && <TouchableHighlight onPress={() => this.setState({ shop: 'GOOGLESEARCH', key: Math.random() })} underlayColor="#E0E0E0">
               <View style={[styles.shopIcon, this.state.shop === 'GOOGLESEARCH' ? styles.selectedShopIcon : null]}>
                 <Image
                   style={styles.shopImage}
@@ -396,7 +384,7 @@ export default class ResultView extends Component {
                 <Text style={styles.shopText}>Google</Text>
               </View>
             </TouchableHighlight>}
-            {this.state.country === 'TW' && <TouchableHighlight onPress={() => this.setState({ shop: 'PCHOME', key: Math.random() })} underlayColor="#E0E0E0">
+            {this.props.country === 'TW' && <TouchableHighlight onPress={() => this.setState({ shop: 'PCHOME', key: Math.random() })} underlayColor="#E0E0E0">
               <View style={[styles.shopIcon, this.state.shop === 'PCHOME' ? styles.selectedShopIcon : null]}>
                 <Image
                   style={styles.shopImage}
@@ -405,13 +393,22 @@ export default class ResultView extends Component {
                 <Text style={styles.shopText}>PChome</Text>
               </View>
             </TouchableHighlight>}
-            {this.state.country === 'TW' && <TouchableHighlight onPress={() => this.setState({ shop: 'BOOKS', key: Math.random() })} underlayColor="#E0E0E0">
+            {this.props.country === 'TW' && <TouchableHighlight onPress={() => this.setState({ shop: 'BOOKS', key: Math.random() })} underlayColor="#E0E0E0">
               <View style={[styles.shopIcon, this.state.shop === 'BOOKS' ? styles.selectedShopIcon : null]}>
                 <Image
                   style={styles.shopImage}
                   source={require('./../../assets/books.png')}  // eslint-disable-line global-require
                 />
                 <Text style={styles.shopText}>博客來</Text>
+              </View>
+            </TouchableHighlight>}
+            {this.props.country === 'TW' && <TouchableHighlight onPress={() => this.setState({ shop: 'GOOGLESEARCH', key: Math.random() })} underlayColor="#E0E0E0">
+              <View style={[styles.shopIcon, this.state.shop === 'GOOGLESEARCH' ? styles.selectedShopIcon : null]}>
+                <Image
+                  style={styles.shopImage}
+                  source={require('./../../assets/googlesearch.png')}  // eslint-disable-line global-require
+                />
+                <Text style={styles.shopText}>Google</Text>
               </View>
             </TouchableHighlight>}
           </View>
@@ -424,7 +421,7 @@ export default class ResultView extends Component {
             </View>}
             {this.state.isDeveloper && this.state.labelAnnotations && <LabelsCell elements={this.state.labelAnnotations} />}
             {this.state.textAnnotations && <TextCell elements={this.state.textAnnotations} />} */}
-            {this.state.query && <MallCell key={this.state.key} shop={this.state.shop} query={this.state.query} filename={this.state.filename} />}
+            {this.state.query && <MallCell key={this.state.key} shop={this.state.shop} query={this.state.query} filename={this.state.filename} country={this.props.country} />}
           </View>}
         </ScrollView>}
         <Icon name="keyboard-arrow-left" style={styles.back} size={30} color="#616161" onPress={() => Actions.pop()} />
@@ -449,9 +446,11 @@ export default class ResultView extends Component {
 ResultView.propTypes = {
   data: React.PropTypes.object,
   fromTimeline: React.PropTypes.bool,
+  country: React.PropTypes.string,
 };
 
 ResultView.defaultProps = {
   data: {},
   fromTimeline: false,
+  country: 'HK',
 };

@@ -28,7 +28,7 @@ exports.locale = {
     library: '相冊',
     more: '更多',
     settings: '設置',
-    timeline: '歷史紀錄',
+    timeline: '紀錄',
     saved: '保存',
     location: '地點',
     hong_kong: '香港',

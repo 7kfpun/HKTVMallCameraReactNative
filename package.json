@@ -7,11 +7,9 @@
   },
   "dependencies": {
     "apsl-react-native-button": "^3.0.0",
-    "firebase": "^3.2.0",
-    "gcloud-storage-api": "^1.2.2",
+    "firebase": "^3.2.1",
     "react": "15.2.1",
     "react-native": "0.29.2",
-    "react-native-animatable": "^0.6.1",
     "react-native-camera": "git+https://github.com/lwansbrough/react-native-camera.git",
     "react-native-collapsible": "^0.7.0",
     "react-native-device-info": "^0.9.3",
@@ -23,7 +21,7 @@
     "react-native-permissions": "^0.1.1",
     "react-native-root-toast": "^1.0.3",
     "react-native-router-flux": "^3.31.1",
-    "react-native-safari-view": "^1.0.0",
+    "react-native-safari-view": "^1.0.1",
     "react-native-share": "^1.0.12",
     "react-native-simple-store": "^1.0.1",
     "react-native-spinkit": "^0.1.2",
@@ -33,10 +31,10 @@
     "underscore": "^1.8.3"
   },
   "devDependencies": {
-    "eslint": "^3.1.0",
+    "eslint": "^3.2.2",
     "eslint-config-airbnb": "^9.0.1",
     "eslint-plugin-import": "^1.8.1",
     "eslint-plugin-jsx-a11y": "^2.0.1",
-    "eslint-plugin-react": "^5.1.1"
+    "eslint-plugin-react": "^6.0.0"
   }
 }

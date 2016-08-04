@@ -19,7 +19,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>16</string>
+	<string>18</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
@@ -28,12 +28,12 @@
 	<dict>
 		<key>NSExceptionDomains</key>
 		<dict>
-			<key>images.hktvmall.com</key>
+			<key>im1.book.com.tw</key>
 			<dict>
 				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
 				<true/>
 			</dict>
-			<key>im1.book.com.tw</key>
+			<key>images.hktvmall.com</key>
 			<dict>
 				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
 				<true/>
